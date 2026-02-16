@@ -10,9 +10,11 @@ base.sql (ETU4190)
 - insérer données test
 
 gestion region et ville
-model(ETU4190)
+models(ETU4190)(ok)
     Region.php
     Ville.php
+
+repositories(ETU4190)(ok)
     RegionRepository.php:- createRegion()
                          - getAllRegions()
     VilleRepository.php:- createVille()
@@ -29,7 +31,7 @@ view(ETU3929)
     ville_detail.php
 
 gestion type et categorie
-model(ETU4190)
+models(ETU4190)
     Categorie.php
     TypeDon.php
     CategorieRepository.php:- createCategorie()
