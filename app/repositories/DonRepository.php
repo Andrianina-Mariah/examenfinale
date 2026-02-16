@@ -8,40 +8,62 @@ class DonRepository {
         $this->pdo = $pdo;
     }
 
-    public function createDon($id_type_don, $quantite, $date_saisie) {
+    // Création don nature ou argent
+    public function createDon($id_type_don, $quantite, $montant, $date_saisie) {
         $st = $this->pdo->prepare("
-            INSERT INTO bngrc_don (id_type_don, quantite, date_saisie)
-            VALUES (?, ?, ?)
+            INSERT INTO bngrc_don (id_type_don, quantite, montant, montant_restant, date_saisie)
+            VALUES (?, ?, ?, ?, ?)
         ");
-        $st->execute([(int)$id_type_don, (int)$quantite, $date_saisie]);
+
+        $montant_restant = $montant;
+
+        $st->execute([
+            (int)$id_type_don,
+            $quantite ? (int)$quantite : null,
+            $montant ? (float)$montant : null,
+            $montant ? (float)$montant_restant : null,
+            $date_saisie
+        ]);
+
         return $this->pdo->lastInsertId();
     }
 
     public function getAllDons() {
         $st = $this->pdo->query("SELECT * FROM bngrc_don");
         $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+
         $dons = [];
         foreach ($rows as $row) {
-            $dons[] = new Don($row['id'], $row['id_type_don'], $row['quantite'], $row['date_saisie']);
+            $dons[] = new Don(
+                $row['id'],
+                $row['id_type_don'],
+                $row['quantite'],
+                $row['montant'],
+                $row['montant_restant'],
+                $row['date_saisie']
+            );
         }
         return $dons;
     }
 
-    public function getDonsDisponiblesParType($id_type_don) {
-        $sql = "
-            SELECT d.*, 
-                (d.quantite - COALESCE((
-                    SELECT SUM(dp.quantite_attribuee) 
-                    FROM bngrc_dispatch dp 
-                    WHERE dp.id_don = d.id
-                ), 0)) as stock_restant
-            FROM bngrc_don d
-            WHERE d.id_type_don = ?
-            HAVING stock_restant > 0
-            ORDER BY d.date_saisie ASC, d.id ASC
-        ";
-        $st = $this->pdo->prepare($sql);
-        $st->execute([(int)$id_type_don]);
+    // Dons argent encore disponibles
+    public function getDonsArgentDisponibles() {
+        $st = $this->pdo->prepare("
+            SELECT * FROM bngrc_don
+            WHERE montant_restant IS NOT NULL
+            AND montant_restant > 0
+            ORDER BY date_saisie ASC, id ASC
+        ");
+        $st->execute();
         return $st->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function updateMontantRestant($id_don, $nouveau_montant) {
+        $st = $this->pdo->prepare("
+            UPDATE bngrc_don
+            SET montant_restant = ?
+            WHERE id = ?
+        ");
+        $st->execute([(float)$nouveau_montant, (int)$id_don]);
     }
 }
