@@ -1,6 +1,6 @@
 ty le mandefa anle travaille tao amle branche manakany am dev
 git checkout dev
-git merge mariah (anaranle branche)
+git merge kisoa-mira (anaranle branche)
 git push
 
 de ty maka anle zavatra vita ao @ dev 
