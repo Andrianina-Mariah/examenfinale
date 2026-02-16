@@ -1,3 +1,5 @@
+TODO LIST PARTIE 1
+
 base.sql (ETU4190)
 - créer base bngrc
 - créer table bngrc_region(id, nom)
@@ -21,11 +23,11 @@ repositories(ETU4190)(ok)
                         - getAllVilles() 
                         - getVilleById()
 
-controller(ETU4269)
+controllers(ETU4269)
     VilleController.php:- afficherListeVilles()
                         - afficherDetailVille()
 
-view(ETU3929)
+views(ETU3929)
     region_list.php
     ville_list.php
     ville_detail.php
@@ -34,100 +36,156 @@ gestion type et categorie
 models(ETU4190)
     Categorie.php
     TypeDon.php
+
+repositories(ETU4190)
     CategorieRepository.php:- createCategorie()
                             - getAllCategories()
     TypeDonRepository.php:- createTypeDon()
                           - getAllTypes()
                           - getTypesByCategorie()
 
-controller
+controllers(ETU4269)
+    TypeDonController.php:- afficherTypes()
+                          - ajouterType
 
-TypeDonController.php afficherTypes ajouterType
+views(ETU3929)
+    type_list.php
+    type_create.php
 
-view
+gestion besoins 
+models(ETU4190)
+    Besoin.php
+    BesoinRepository.php:- createBesoin()
+                         - getBesoinByVille()
+                         - getTotalBesoinByVille()
+                         - getBesoinRestantByVille()
 
-type_list.php
+controllers(ETU4269)
+    BesoinController.php:- afficherFormBesoin()
+                         - enregistrerBesoin
 
-type_create.php
+views(ETU3929)
+    besoin_create.php
+    besoin_list.php
 
-gestion besoins (ETU2)
+gestion dons
+models(ETU4190)
+    Don.php
+    Dispatch.php
 
-model
+repositories(ETU4190)
+DonRepository.php:- createDon()
+                  - getAllDons()
+DispatchRepository.php:- createDispatch()
+                       - getTotalRecuByVille() 
+                       - getRecuParTypeByVille()
 
-Besoin.php
+controllers(ETU4269)
+    DonController.php:- afficherFormDon()
+                      - enregistrerDon()
+                      - simulerDispatch()
 
-BesoinRepository.php createBesoin getBesoinByVille getTotalBesoinByVille getBesoinRestantByVille
+views
+    don_create.php
+    don_list.php
 
-controller
+logique dispatch:
+    récupérer dons triés par date_saisie
+    récupérer besoins par ville triés par date_saisie
+    comparer quantite don et quantite besoin restant
+    attribuer quantite possible
+    insérer dans dispatch
+    continuer jusqu’à épuisement du don
 
-BesoinController.php afficherFormBesoin enregistrerBesoin
+tableau de bord 
+models(ETU4190)
+    DashboardRepository.php:- getResumeParVille()
 
-view
+requêtes nécessaires:
+    total besoins par ville (SUM quantite besoin)
+    total dons reçus par ville (SUM quantite_attribuee dispatch)
+    calcul reste = besoin - reçu
 
-besoin_create.php
+controllers(ETU4269)
+    DashboardController.php:- afficherDashboard()
 
-besoin_list.php
+views(ETU3929)
+    dashboard.php
 
-gestion dons (ETU2)
 
-model
+TODO LIST PARTIE 2
 
-Don.php
+base.sql (ETU4190)
+modifier table besoin ajouter prix_unitaire
+modifier table don ajouter type et montant
+créer table achat(id, id_ville, id_type_don, quantite, prix_unitaire, frais_pourcentage, montant_total, date_achat)
+ajouter champ montant_utilise dans dispatch
 
-DonRepository.php createDon getAllDons
+gestion achats 
+models(ETU4190)
+    Achat.php
 
-Dispatch.php
+repositories(ETU4190)
+    AchatRepository.php:- createAchat()
+                        - getAchatByVille()
+                        - getTotalAchatByVille()
+    DonRepository.php:- getDonsArgentRestants()
+                      - updateMontantRestant()
 
-DispatchRepository.php createDispatch getTotalRecuByVille getRecuParTypeByVille
+controllers(ETU4269)
+    AchatController.php:- afficherBesoinsRestants()
+                        - simulerAchat()
+                        - validerAchat()
 
-controller
+views(ETU3929)
+    besoins_restants.php
+        - liste besoins non satisfaits
+        - bouton acheter
+    simulation.php
+        - afficher résultat simulation
+        - bouton validation
+    achat_list.php
+        liste des achats filtrable par ville
+        logique achat
+        simulation
+        récupérer besoin restant
+        calculer montant = quantite × prix_unitaire
+        calculer frais = montant × pourcentage
+        total = montant + frais
+        vérifier dons argent restants
+        afficher résultat
+        validation
+        vérifier encore montant disponible
+        créer achat
+        diminuer montant don
+        diminuer besoin restant
+        enregistrer dispatch si nécessaire
 
-DonController.php afficherFormDon enregistrerDon simulerDispatch
+page simulation
+    bouton simuler
+    bouton valider
+    message erreur si argent insuffisant
+    message erreur si don déjà utilisé
 
-view
+page récapitulation
+models(ETU4190)
 
-don_create.php
+repositories(ETU4190)
+    RecapRepository.php:- getTotalBesoinsMontant()
+                        - getTotalSatisfaitMontant()
+                        - getTotalRestantMontant()
 
-don_list.php
+controllers(ETU4269)
+    RecapController.php:- afficherRecap()
 
-logique dispatch (ETU2)
+views(ETU3929)
+    recap.php
+        total besoins
+        total satisfaits
+        total restants
+        bouton actualiser (Ajax)
 
-récupérer dons triés par date_saisie
-
-récupérer besoins par ville triés par date_saisie
-
-comparer quantite don et quantite besoin restant
-
-attribuer quantite possible
-
-insérer dans dispatch
-
-continuer jusqu’à épuisement du don
-
-tableau de bord (PRIORITÉ ACTUELLE) (ETU3)
-
-model
-
-DashboardRepository.php getResumeParVille
-
-requêtes nécessaires
-
-total besoins par ville (SUM quantite besoin)
-
-total dons reçus par ville (SUM quantite_attribuee dispatch)
-
-calcul reste = besoin - reçu
-
-controller
-
-DashboardController.php afficherDashboard
-
-view
-
-dashboard.php
-tableau colonnes :
-ville
-type_don
-quantite demandee
-quantite reçue
-reste
+Ajax
+    route GET /recap/data
+    retourne JSON
+    mise à jour sans refresh
