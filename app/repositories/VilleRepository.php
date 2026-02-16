@@ -24,6 +24,26 @@ class VilleRepository {
         return $villes;
     }
 
+    public function getAllVillesWithRegion() {
+        $sql = "
+            SELECT v.id AS ville_id, v.nom AS ville_nom, r.id AS region_id, r.nom AS region_nom
+            FROM bngrc_ville v
+            INNER JOIN bngrc_region r ON v.id_region = r.id
+        ";
+        $st = $this->pdo->query($sql);
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+
+        $villes = [];
+        foreach ($rows as $row) {
+            // On peut retourner un tableau associatif combiné ville + région
+            $villes[] = [
+                'ville' => new Ville($row['ville_id'], $row['ville_nom'], $row['region_id']),
+                'region_nom' => $row['region_nom']
+            ];
+        }
+        return $villes;
+    }
+
     public function getVilleById($id) {
         $st = $this->pdo->prepare("SELECT * FROM bngrc_ville WHERE id = ?");
         $st->execute([(int)$id]);
