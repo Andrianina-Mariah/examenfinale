@@ -63,13 +63,17 @@ class BesoinRepository {
                 b.prix_unitaire,
                 b.date_saisie AS besoin_date,
                 td.nom AS type_nom,
-                COALESCE(SUM(d.quantite_attribuee), 0) AS quantite_attribuee
+                -- Calcul de la somme attribuée uniquement pour ce type de don spécifique
+                (
+                    SELECT COALESCE(SUM(dp.quantite_attribuee), 0)
+                    FROM bngrc_dispatch dp
+                    JOIN bngrc_don d ON dp.id_don = d.id
+                    WHERE dp.id_ville = b.id_ville 
+                    AND d.id_type_don = b.id_type_don
+                ) AS quantite_attribuee
             FROM bngrc_besoin b
             LEFT JOIN bngrc_type_don td ON b.id_type_don = td.id
-            LEFT JOIN bngrc_dispatch d 
-                ON d.id_ville = b.id_ville
             WHERE b.id_ville = ?
-            GROUP BY b.id
         ";
 
         $st = $this->pdo->prepare($sql);
@@ -77,7 +81,6 @@ class BesoinRepository {
         $rows = $st->fetchAll(PDO::FETCH_ASSOC);
 
         $result = [];
-
         foreach ($rows as $row) {
             $besoin = new Besoin(
                 $row['besoin_id'],
@@ -98,4 +101,24 @@ class BesoinRepository {
         return $result;
     }
 
+    public function getBesoinsNonSatisfaitsParType($id_type_don) {
+        // Cette requête récupère les besoins et soustrait ce qui a déjà été reçu
+        // On ne prend que ceux où le reste > 0
+        $sql = "
+            SELECT b.*, 
+                (b.quantite - COALESCE((
+                    SELECT SUM(dp.quantite_attribuee) 
+                    FROM bngrc_dispatch dp 
+                    JOIN bngrc_don d ON dp.id_don = d.id 
+                    WHERE dp.id_ville = b.id_ville AND d.id_type_don = b.id_type_don
+                ), 0)) as reste
+            FROM bngrc_besoin b
+            WHERE b.id_type_don = ?
+            HAVING reste > 0
+            ORDER BY b.date_saisie ASC, b.id ASC
+        ";
+        $st = $this->pdo->prepare($sql);
+        $st->execute([(int)$id_type_don]);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

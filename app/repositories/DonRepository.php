@@ -26,4 +26,22 @@ class DonRepository {
         }
         return $dons;
     }
+
+    public function getDonsDisponiblesParType($id_type_don) {
+        $sql = "
+            SELECT d.*, 
+                (d.quantite - COALESCE((
+                    SELECT SUM(dp.quantite_attribuee) 
+                    FROM bngrc_dispatch dp 
+                    WHERE dp.id_don = d.id
+                ), 0)) as stock_restant
+            FROM bngrc_don d
+            WHERE d.id_type_don = ?
+            HAVING stock_restant > 0
+            ORDER BY d.date_saisie ASC, d.id ASC
+        ";
+        $st = $this->pdo->prepare($sql);
+        $st->execute([(int)$id_type_don]);
+        return $st->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
