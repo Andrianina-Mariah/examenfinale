@@ -89,6 +89,26 @@
                             <i class="bi bi-gift"></i> Ajout Don
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="/achats/besoins" class="nav-link">
+                            <i class="bi bi-cart-check"></i> Achats
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/achats/liste" class="nav-link">
+                            <i class="bi bi-receipt"></i> Historique
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/simulation" class="nav-link">
+                            <i class="bi bi-shuffle"></i> Dispatch
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/recapitulatif" class="nav-link">
+                            <i class="bi bi-bar-chart-line"></i> Récap
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
