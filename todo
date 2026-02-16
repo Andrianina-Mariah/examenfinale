@@ -25,8 +25,11 @@ controller(ETU4269)
 
 view(ETU3929)
     region_list.php
-    ville_list.php
-    ville_detail.php
+    villes.php
+    acceuil.php
+    Footer.php
+    Header.php
+    
 
 gestion type et categorie
 model(ETU4190)
