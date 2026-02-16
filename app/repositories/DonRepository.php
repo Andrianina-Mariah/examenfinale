@@ -9,19 +9,30 @@ class DonRepository {
     }
 
     // Création don nature ou argent
-    public function createDon($id_type_don, $quantite, $montant, $date_saisie) {
+    public function createDon($id_type_don, $type_categorie, $quantite, $montant, $date_saisie) {
+        // Si type = argent, on remplit montant et montant_restant, quantite = null
+        if ($type_categorie === 'argent') {
+            $montant_restant = $montant;
+            $quantite_to_insert = null;
+            $montant_to_insert = (float)$montant;
+            $montant_restant_to_insert = (float)$montant_restant;
+        } else {
+            // Si type ≠ argent, on remplit quantite, montant = 0
+            $quantite_to_insert = (int)$quantite;
+            $montant_to_insert = 0;
+            $montant_restant_to_insert = 0;
+        }
+
         $st = $this->pdo->prepare("
             INSERT INTO bngrc_don (id_type_don, quantite, montant, montant_restant, date_saisie)
             VALUES (?, ?, ?, ?, ?)
         ");
 
-        $montant_restant = $montant;
-
         $st->execute([
             (int)$id_type_don,
-            $quantite ? (int)$quantite : null,
-            $montant ? (float)$montant : null,
-            $montant ? (float)$montant_restant : null,
+            $quantite_to_insert,
+            $montant_to_insert,
+            $montant_restant_to_insert,
             $date_saisie
         ]);
 
@@ -66,4 +77,10 @@ class DonRepository {
         ");
         $st->execute([(float)$nouveau_montant, (int)$id_don]);
     }
+    public function getDonsDisponiblesParType($id_type_don) { 
+        $sql = " SELECT d.*, (d.quantite - COALESCE(( SELECT SUM(dp.quantite_attribuee) FROM bngrc_dispatch dp WHERE dp.id_don = d.id ), 0)) as stock_restant FROM bngrc_don d WHERE d.id_type_don = ? HAVING stock_restant > 0 ORDER BY d.date_saisie ASC, d.id ASC "; 
+        $st = $this->pdo->prepare($sql); 
+        $st->execute([(int)$id_type_don]); 
+        return $st->fetchAll(PDO::FETCH_ASSOC); 
+    } 
 }

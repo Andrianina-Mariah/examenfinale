@@ -37,11 +37,33 @@ class DonController {
                 $id_type_don = $typeRepo->createTypeDon($data->nouveau_type_nom, $data->id_categorie_nouveau);
             }
 
-            // 2. Création du don
-            $id_don = $donRepo->createDon($id_type_don, $data->quantite, $data->date_saisie);
-            
+            // 2. Déterminer le type de catégorie et la date
+            $date_saisie = date('Y-m-d'); // date actuelle
+            $type_categorie = $data->type_categorie ?? 'materiel'; // par défaut materiel si non précisé
+
+            // 3. Création du don selon la catégorie
+            if ($type_categorie === 'argent') {
+                $quantite = null;
+                $montant = (float)$data->montant ?? 0;
+            } else {
+                $quantite = (int)$data->quantite ?? 0;
+                $montant = 0;
+            }
+
+            $id_don = $donRepo->createDon(
+                $id_type_don,
+                $type_categorie,
+                $quantite,
+                $montant,
+                $date_saisie
+            );
+
             // --- LOGIQUE DE DISPATCH AUTOMATIQUE ---
-            $quantiteRestanteDon = (int)$data->quantite;
+            $quantiteRestanteDon = $quantite ?? 0; // pour matériel/nature
+            if ($type_categorie === 'argent') {
+                $quantiteRestanteDon = (float)$montant; // pour argent
+            }
+
             $dateAujourdhui = date('Y-m-d');
 
             // Récupérer les besoins en attente pour ce type de produit (du plus vieux au plus récent)

@@ -52,5 +52,11 @@ class Besoin {
         $this->date_saisie = $date_saisie;
     }
 
+    public function getId() { return $this->id; }
+    public function getIdVille() { return $this->id_ville; }
+    public function getIdTypeDon() { return $this->id_type_don; }
+    public function getQuantite() { return $this->quantite; } // <-- ici
     public function getQuantiteRestante() { return $this->quantite_restante; }
+    public function getPrixUnitaire() { return $this->prix_unitaire; }
+    public function getDateSaisie() { return $this->date_saisie; }
 }
