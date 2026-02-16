@@ -21,11 +21,11 @@ repositories(ETU4190)(ok)
                         - getAllVilles() 
                         - getVilleById()
 
-controller(ETU4269)
+controllers(ETU4269)
     VilleController.php:- afficherListeVilles()
                         - afficherDetailVille()
 
-view(ETU3929)
+views(ETU3929)
     region_list.php
     villes.php
     acceuil.php
@@ -37,53 +37,48 @@ gestion type et categorie
 models(ETU4190)
     Categorie.php
     TypeDon.php
+
+repositories(ETU4190)
     CategorieRepository.php:- createCategorie()
                             - getAllCategories()
     TypeDonRepository.php:- createTypeDon()
                           - getAllTypes()
                           - getTypesByCategorie()
 
-controller
+controllers(ETU4269)
+    TypeDonController.php:- afficherTypes()
+                          - ajouterType()
 
-TypeDonController.php afficherTypes ajouterType
+views(ETU3929)
+    type_list.php
+    type_create.php
 
-view
+gestion besoins
+models(ETU4190)
+    Besoin.php
 
-type_list.php
+repositorie(ETU4190)
+    BesoinRepository.php:- createBesoin()
+                         - getBesoinByVille()
+                         - getTotalBesoinByVille()
+                         - getBesoinRestantByVille()
 
-type_create.php
+controllers(ETU4269)
+    BesoinController.php:- afficherFormBesoin()
+                         - enregistrerBesoin()
 
-gestion besoins (ETU2)
+views(ETU3929)
+    besoin_create.php
+    besoin_list.php
 
-model
-
-Besoin.php
-
-BesoinRepository.php createBesoin getBesoinByVille getTotalBesoinByVille getBesoinRestantByVille
-
-controller
-
-BesoinController.php afficherFormBesoin enregistrerBesoin
-
-view
-
-besoin_create.php
-
-besoin_list.php
-
-gestion dons (ETU2)
-
-model
-
+gestion dons 
+models(ETU4190)
 Don.php
-
 DonRepository.php createDon getAllDons
-
 Dispatch.php
-
 DispatchRepository.php createDispatch getTotalRecuByVille getRecuParTypeByVille
 
-controller
+controllers
 
 DonController.php afficherFormDon enregistrerDon simulerDispatch
 
