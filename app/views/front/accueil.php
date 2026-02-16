@@ -1,6 +1,3 @@
-<!-- accueil.php -->
-<?php include 'Header.php'; ?>
-
 <div class="container">
     <h2 class="mb-4">Liste des Villes et leurs besoins</h2>
 
@@ -12,15 +9,15 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
 
-                        <h5 class="card-title"><?= $villes[$i]->getNom() ?></h5>
-                        <p class="text-muted">Région : <?= $villes[$i]->getIdRegion() ?></p>
+                        <h5 class="card-title"><?= $villes[$i]['ville']->getNom() ?></h5>
+                        <p class="text-muted">Région : <?= $villes[$i]['region_nom'] ?></p>
 
                         <h6>Besoins :</h6>
                         <ul>
                             <li>Aucun donné</li>
                         </ul>
 
-                        <a href="/villes?id=<?= $villes[$i]->getId() ?>" class="btn btn-primary btn-sm">Voir détails</a>
+                        <a href="/villesDetails/<?= $villes[$i]['ville']->getId() ?>" class="btn btn-primary btn-sm">Voir détails</a>
                     </div>
                 </div>
             </div>
@@ -32,5 +29,3 @@
 
     </div>
 </div>
-
-<?php include 'Footer.php'; ?>

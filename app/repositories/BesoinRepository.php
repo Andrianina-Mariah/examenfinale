@@ -52,6 +52,7 @@ class BesoinRepository {
         $st->execute([(int)$id_ville, (int)$id_ville]);
         return (int)$st->fetchColumn();
     }
+
     public function getBesoinAvecDispatchParVille($id_ville) {
         $sql = "
             SELECT 
@@ -61,12 +62,14 @@ class BesoinRepository {
                 b.quantite AS besoin_quantite,
                 b.prix_unitaire,
                 b.date_saisie AS besoin_date,
-                d.id AS dispatch_id,
-                d.quantite_attribuee,
-                d.date_dispatch
+                td.nom AS type_nom,
+                COALESCE(SUM(d.quantite_attribuee), 0) AS quantite_attribuee
             FROM bngrc_besoin b
-            LEFT JOIN bngrc_dispatch d ON b.id = d.id_besoin
+            LEFT JOIN bngrc_type_don td ON b.id_type_don = td.id
+            LEFT JOIN bngrc_dispatch d 
+                ON d.id_ville = b.id_ville
             WHERE b.id_ville = ?
+            GROUP BY b.id
         ";
 
         $st = $this->pdo->prepare($sql);
@@ -74,6 +77,7 @@ class BesoinRepository {
         $rows = $st->fetchAll(PDO::FETCH_ASSOC);
 
         $result = [];
+
         foreach ($rows as $row) {
             $besoin = new Besoin(
                 $row['besoin_id'],
@@ -84,19 +88,10 @@ class BesoinRepository {
                 $row['besoin_date']
             );
 
-            // On inclut aussi les infos du dispatch si existant
-            $dispatch = null;
-            if ($row['dispatch_id'] !== null) {
-                $dispatch = [
-                    'id' => $row['dispatch_id'],
-                    'quantite_attribuee' => $row['quantite_attribuee'],
-                    'date_dispatch' => $row['date_dispatch']
-                ];
-            }
-
             $result[] = [
                 'besoin' => $besoin,
-                'dispatch' => $dispatch
+                'type_nom' => $row['type_nom'],
+                'quantite_attribuee' => (int)$row['quantite_attribuee']
             ];
         }
 

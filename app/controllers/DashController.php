@@ -5,8 +5,9 @@ class DashController {
       $pdo  = Flight::db();
       $repo = new VilleRepository($pdo);
 
-        Flight::render('front/accueil.php', [
-        'villes' => $repo->getAllVilles()
+        Flight::render('front/modele.php', [
+            'var' => 'accueil.php',
+            'villes' => $repo->getAllVillesWithRegion()
         ]);
     } catch (Throwable $e) {
       http_response_code(500);
@@ -20,4 +21,32 @@ class DashController {
       ]);
     }
   }
+
+  public static function Details($id) {
+        try {
+            $pdo = Flight::db();
+
+            $villeRepo  = new VilleRepository($pdo);
+            $besoinRepo = new BesoinRepository($pdo);
+
+            $ville   = $villeRepo->getVilleById($id);
+            $besoins = $besoinRepo->getBesoinAvecDispatchParVille($id);
+
+            Flight::render('front/modele.php', [
+                'var' => 'VilleDetails.php',
+                'ville' => $ville,
+                'besoins' => $besoins
+            ]);
+
+        } catch (Throwable $e) {
+            http_response_code(500);
+            Flight::json([
+                'ok' => false,
+                'errors' => [
+                    '_global' => $e->getMessage().' '.$e->getFile().' '.$e->getLine()
+                ]
+            ]);
+        }
+    }
+
 }

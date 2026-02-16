@@ -35,7 +35,6 @@ class VilleRepository {
 
         $villes = [];
         foreach ($rows as $row) {
-            // On peut retourner un tableau associatif combiné ville + région
             $villes[] = [
                 'ville' => new Ville($row['ville_id'], $row['ville_nom'], $row['region_id']),
                 'region_nom' => $row['region_nom']
