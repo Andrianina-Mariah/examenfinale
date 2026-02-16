@@ -90,15 +90,38 @@
                                             </div>
                                         </div>
                                         
+                                        <!-- Sélection de la catégorie -->
                                         <label class="form-label fw-bold text-dark small mb-2">
-                                            Sélectionner dans la liste
+                                            <i class="bi bi-tag-fill text-primary me-1"></i> Catégorie
                                         </label>
-                                        <select name="id_type_don" class="form-select form-select-lg shadow-sm">
-                                            <option value="">-- Choisir un type --</option>
-                                            <?php foreach($types as $t): ?>
-                                                <option value="<?= $t->getId() ?>"><?= htmlspecialchars($t->getNom()) ?></option>
+                                        <select id="categorie_besoin" class="form-select form-select-lg shadow-sm mb-3">
+                                            <option value="">-- Choisir une catégorie --</option>
+                                            <?php foreach($categories as $c): ?>
+                                                <option value="<?= $c->getId() ?>" data-nom="<?= strtolower(htmlspecialchars($c->getNom())) ?>"><?= htmlspecialchars($c->getNom()) ?></option>
                                             <?php endforeach; ?>
                                         </select>
+                                        
+                                        <!-- Liste déroulante des types (pour Nature et Materiel) -->
+                                        <div id="type_don_container_besoin">
+                                            <label class="form-label fw-bold text-dark small mb-2">
+                                                Type de don
+                                            </label>
+                                            <select name="id_type_don" id="type_don_select_besoin" class="form-select form-select-lg shadow-sm">
+                                                <option value="">-- Sélectionnez d'abord une catégorie --</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Input montant (pour Argent) -->
+                                        <div id="montant_container_besoin" style="display: none;">
+                                            <label class="form-label fw-bold text-dark small mb-2">
+                                                <i class="bi bi-cash-coin text-success me-1"></i> Montant en Ariary
+                                            </label>
+                                            <div class="input-group input-group-lg shadow-sm">
+                                                <input type="number" name="montant_argent" id="montant_argent_besoin" class="form-control" placeholder="0" min="0" step="1">
+                                                <span class="input-group-text bg-light fw-bold">Ar</span>
+                                            </div>
+                                        </div>
+                                        
                                         <div class="form-text mt-2">
                                             Types déjà enregistrés dans le système
                                         </div>
@@ -141,11 +164,84 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <!-- Script pour le formulaire besoin -->
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // Données des types groupés par catégorie
+                            const typesByCategorie = {
+                                <?php foreach($categories as $c): ?>
+                                <?= $c->getId() ?>: [
+                                    <?php foreach($types as $t): ?>
+                                        <?php if($t->getIdCategorie() == $c->getId()): ?>
+                                        {id: <?= $t->getId() ?>, nom: "<?= addslashes(htmlspecialchars($t->getNom())) ?>"},
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                ],
+                                <?php endforeach; ?>
+                            };
+                            
+                            const categorieSelect = document.getElementById('categorie_besoin');
+                            const typeDonContainer = document.getElementById('type_don_container_besoin');
+                            const typeDonSelect = document.getElementById('type_don_select_besoin');
+                            const montantContainer = document.getElementById('montant_container_besoin');
+                            const montantInput = document.getElementById('montant_argent_besoin');
+                            const quantitePrixCard = document.getElementById('quantite_prix_card_besoin');
+                            const quantiteInput = document.getElementById('quantite_besoin');
+                            const prixInput = document.getElementById('prix_unitaire_besoin');
+                            const typeCategorieInput = document.getElementById('type_categorie_besoin');
+                            
+                            categorieSelect.addEventListener('change', function() {
+                                const selectedOption = this.options[this.selectedIndex];
+                                const categorieNom = selectedOption.dataset.nom || '';
+                                const categorieId = this.value;
+                                
+                                if (categorieNom.includes('argent')) {
+                                    // Afficher l'input montant, cacher la liste des types et la section quantité/prix
+                                    typeDonContainer.style.display = 'none';
+                                    montantContainer.style.display = 'block';
+                                    quantitePrixCard.style.display = 'none';
+                                    typeDonSelect.value = '';
+                                    typeDonSelect.removeAttribute('required');
+                                    quantiteInput.removeAttribute('required');
+                                    prixInput.removeAttribute('required');
+                                    quantiteInput.value = '';
+                                    prixInput.value = '';
+                                    montantInput.setAttribute('required', 'required');
+                                    typeCategorieInput.value = 'argent';
+                                } else {
+                                    // Afficher la liste des types et la section quantité/prix, cacher l'input montant
+                                    typeDonContainer.style.display = 'block';
+                                    montantContainer.style.display = 'none';
+                                    quantitePrixCard.style.display = 'block';
+                                    montantInput.value = '';
+                                    montantInput.removeAttribute('required');
+                                    quantiteInput.setAttribute('required', 'required');
+                                    prixInput.setAttribute('required', 'required');
+                                    typeCategorieInput.value = 'materiel';
+                                    
+                                    // Remplir la liste des types
+                                    typeDonSelect.innerHTML = '<option value="">-- Choisir un type --</option>';
+                                    if (categorieId && typesByCategorie[categorieId]) {
+                                        typesByCategorie[categorieId].forEach(function(type) {
+                                            const option = document.createElement('option');
+                                            option.value = type.id;
+                                            option.textContent = type.nom;
+                                            typeDonSelect.appendChild(option);
+                                        });
+                                    }
+                                }
+                            });
+                        });
+                        </script>
+                        
+                        <!-- Champ caché pour le type de catégorie -->
+                        <input type="hidden" name="type_categorie" id="type_categorie_besoin" value="materiel">
                     </div>
                 </div>
 
                 <!-- ÉTAPE 3 : Quantité et Prix -->
-                <div class="card shadow-sm border-0 mb-4">
+                <div class="card shadow-sm border-0 mb-4" id="quantite_prix_card_besoin">
                     <div class="card-header bg-gradient py-3" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
                         <h5 class="mb-0 text-white fw-bold">
                             <span class="badge bg-white text-warning rounded-circle me-2">3</span>
@@ -160,7 +256,7 @@
                                     Quantité nécessaire <span class="text-danger">*</span>
                                 </label>
                                 <div class="input-group input-group-lg shadow-sm">
-                                    <input type="number" name="quantite" class="form-control" placeholder="Nombre d'unités" min="1" required>
+                                    <input type="number" name="quantite" id="quantite_besoin" class="form-control" placeholder="Nombre d'unités" min="1" required>
                                     <span class="input-group-text bg-light">
                                         <i class="bi bi-hash"></i> unités
                                     </span>
@@ -175,7 +271,7 @@
                                     Prix Unitaire <span class="text-danger">*</span>
                                 </label>
                                 <div class="input-group input-group-lg shadow-sm">
-                                    <input type="number" step="0.01" name="prix_unitaire" class="form-control" placeholder="0.00" min="0" required>
+                                    <input type="number" step="0.01" name="prix_unitaire" id="prix_unitaire_besoin" class="form-control" placeholder="0.00" min="0" required>
                                     <span class="input-group-text bg-light fw-bold">Ar</span>
                                 </div>
                                 <div class="form-text">
