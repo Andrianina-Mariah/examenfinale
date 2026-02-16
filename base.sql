@@ -2,7 +2,7 @@
 CREATE DATABASE IF NOT EXISTS bngrc;
 USE bngrc;
 
--- 2️⃣ Créer les tables
+-- 2️⃣ Créer les tables (Structure Finale sans ALTER)
 
 CREATE TABLE bngrc_region (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -13,9 +13,7 @@ CREATE TABLE bngrc_ville (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     id_region INT NOT NULL,
-    FOREIGN KEY (id_region) REFERENCES bngrc_region(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    FOREIGN KEY (id_region) REFERENCES bngrc_region(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE bngrc_categorie (
@@ -27,34 +25,29 @@ CREATE TABLE bngrc_type_don (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     id_categorie INT NOT NULL,
-    FOREIGN KEY (id_categorie) REFERENCES bngrc_categorie(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    FOREIGN KEY (id_categorie) REFERENCES bngrc_categorie(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE bngrc_besoin (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_ville INT NOT NULL,
     id_type_don INT NOT NULL,
-    quantite INT NOT NULL,
-    prix_unitaire DECIMAL(10,2),
+    quantite INT DEFAULT NULL, -- Modifié directement ici
+    prix_unitaire DECIMAL(10,2) DEFAULT NULL, -- Modifié directement ici
+    montant DECIMAL(12,2) DEFAULT NULL, -- Ajouté directement ici
     date_saisie DATE NOT NULL,
-    FOREIGN KEY (id_ville) REFERENCES bngrc_ville(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    FOREIGN KEY (id_type_don) REFERENCES bngrc_type_don(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    FOREIGN KEY (id_ville) REFERENCES bngrc_ville(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_type_don) REFERENCES bngrc_type_don(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE bngrc_don (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_type_don INT NOT NULL,
-    quantite INT NOT NULL,
+    quantite INT DEFAULT NULL, -- Modifié directement ici
+    montant DECIMAL(12,2) DEFAULT NULL, -- Ajouté directement ici
+    montant_restant DECIMAL(12,2) DEFAULT NULL, -- Ajouté directement ici
     date_saisie DATE NOT NULL,
-    FOREIGN KEY (id_type_don) REFERENCES bngrc_type_don(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    FOREIGN KEY (id_type_don) REFERENCES bngrc_type_don(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE bngrc_dispatch (
@@ -63,58 +56,9 @@ CREATE TABLE bngrc_dispatch (
     id_ville INT NOT NULL,
     quantite_attribuee INT NOT NULL,
     date_dispatch DATE NOT NULL,
-    FOREIGN KEY (id_don) REFERENCES bngrc_don(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    FOREIGN KEY (id_ville) REFERENCES bngrc_ville(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    FOREIGN KEY (id_don) REFERENCES bngrc_don(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_ville) REFERENCES bngrc_ville(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- 3️⃣ Insérer des données test
-
-INSERT INTO bngrc_region (nom) VALUES 
-('Analamanga'),
-('Atsinanana'),
-('Bongolava');
-
-INSERT INTO bngrc_ville (nom, id_region) VALUES
-('Antananarivo', 1),
-('Toamasina', 2),
-('Bongolava Ville', 3);
-
-INSERT INTO bngrc_categorie (nom) VALUES
-('Nature'),
-('Materiaux'),
-('Argent');
-
-INSERT INTO bngrc_type_don (nom, id_categorie) VALUES
-('Argent', 3);
-
-INSERT INTO bngrc_type_don (nom, id_categorie) VALUES
-('Riz', 1),
-('Pâtes', 1),
-('Paracétamol', 2),
-('Masques', 2);
-
-INSERT INTO bngrc_besoin (id_ville, id_type_don, quantite, prix_unitaire, date_saisie) VALUES
-(1, 1, 100, 2.50, '2026-02-16'),
-(2, 3, 50, 1.20, '2026-02-16'),
-(3, 4, 30, 5.00, '2026-02-16');
-
-INSERT INTO bngrc_don (id_type_don, quantite, date_saisie) VALUES
-(1, 50, '2026-02-16'),
-(3, 20, '2026-02-16'),
-(4, 10, '2026-02-16');
-
-INSERT INTO bngrc_dispatch (id_don, id_ville, quantite_attribuee, date_dispatch) VALUES
-(1, 1, 30, '2026-02-16'),
-(2, 2, 10, '2026-02-16'),
-(3, 3, 5, '2026-02-16');
-
-ALTER TABLE bngrc_don
-ADD COLUMN montant DECIMAL(12,2) DEFAULT NULL,
-ADD COLUMN montant_restant DECIMAL(12,2) DEFAULT NULL;
 
 CREATE TABLE bngrc_achat (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -125,12 +69,8 @@ CREATE TABLE bngrc_achat (
     frais_pourcentage DECIMAL(5,2) NOT NULL,
     montant_total DECIMAL(12,2) NOT NULL,
     date_achat DATE NOT NULL,
-    FOREIGN KEY (id_ville) REFERENCES bngrc_ville(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    FOREIGN KEY (id_type_don) REFERENCES bngrc_type_don(id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
+    FOREIGN KEY (id_ville) REFERENCES bngrc_ville(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_type_don) REFERENCES bngrc_type_don(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE bngrc_config (
@@ -138,11 +78,38 @@ CREATE TABLE bngrc_config (
     frais_pourcentage DECIMAL(5,2) NOT NULL
 );
 
+-- 3️⃣ Insérer les données (Ordre logique : Catégories -> Régions -> Villes -> Types)
+
 INSERT INTO bngrc_config (frais_pourcentage) VALUES (10.00);
 
---modif
-ALTER TABLE bngrc_don MODIFY COLUMN quantite INT DEFAULT NULL;
+INSERT INTO bngrc_categorie (nom) VALUES ('Nature'), ('Materiaux'), ('Argent');
 
-ALTER TABLE bngrc_besoin MODIFY COLUMN quantite INT DEFAULT NULL;
-ALTER TABLE bngrc_besoin MODIFY COLUMN prix_unitaire DECIMAL(10,2) DEFAULT NULL;
-ALTER TABLE bngrc_besoin ADD COLUMN montant DECIMAL(12,2) DEFAULT NULL;
+INSERT INTO bngrc_region (nom) VALUES ('Analamanga'), ('Atsinanana'), ('Bongolava');
+
+INSERT INTO bngrc_ville (nom, id_region) VALUES
+('Antananarivo', 1),
+('Toamasina', 2),
+('Bongolava Ville', 3);
+
+INSERT INTO bngrc_type_don (nom, id_categorie) VALUES
+('Riz', 1),
+('Pâtes', 1),
+('Paracétamol', 2),
+('Masques', 2),
+('Argent', 3);
+
+-- Données de simulation
+INSERT INTO bngrc_besoin (id_ville, id_type_don, quantite, prix_unitaire, date_saisie) VALUES
+(1, 1, 100, 2500.00, '2026-02-16'),
+(2, 2, 50, 1500.00, '2026-02-16'),
+(3, 3, 30, 5000.00, '2026-02-16');
+
+INSERT INTO bngrc_don (id_type_don, quantite, date_saisie) VALUES
+(1, 50, '2026-02-16'),
+(2, 20, '2026-02-16'),
+(3, 10, '2026-02-16');
+
+INSERT INTO bngrc_dispatch (id_don, id_ville, quantite_attribuee, date_dispatch) VALUES
+(1, 1, 30, '2026-02-16'),
+(2, 2, 10, '2026-02-16'),
+(3, 3, 5, '2026-02-16');
