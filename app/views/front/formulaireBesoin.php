@@ -1,61 +1,221 @@
-<div class="card shadow">
-    <div class="card-header bg-primary text-white">
-        <h4 class="mb-0">Saisie des besoins des sinistrés</h4>
-    </div>
-    <div class="card-body">
-        <form action="/besoin/enregistrer" method="POST">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label fw-bold">Ville</label>
-                    <select name="id_ville" class="form-select" required>
-                        <?php foreach($villes as $v): ?>
-                            <option value="<?= $v->getId() ?>"><?= $v->getNom() ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold">Date de saisie</label>
-                    <input type="date" name="date_saisie" class="form-control" value="<?= date('Y-m-d') ?>" required>
-                </div>
-            </div>
-
-            <div class="border p-3 mb-3 bg-light">
-                <h6>Nature du besoin</h6>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="small">Type de don existant</label>
-                        <select name="id_type_don" class="form-select">
-                            <option value="">-- Sélectionner --</option>
-                            <?php foreach($types as $t): ?>
-                                <option value="<?= $t->getId() ?>"><?= $t->getNom() ?></option>
-                            <?php endforeach; ?>
-                        </select>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-11 col-lg-10">
+            <!-- Breadcrumb et en-tête -->
+            <div class="mb-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-3">
+                        <li class="breadcrumb-item"><a href="/" class="text-decoration-none"><i class="bi bi-house-door"></i> Accueil</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Saisie besoin</li>
+                    </ol>
+                </nav>
+                <div class="d-flex align-items-center mb-2">
+                    <div class="bg-primary text-white rounded-circle p-3 me-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-clipboard-heart fs-4"></i>
                     </div>
-                    <div class="col-md-6">
-                        <label class="small text-primary">Ou créer un nouveau type</label>
-                        <input type="text" name="nouveau_type_nom" class="form-control mb-1" placeholder="Nom">
-                        <select name="id_categorie_nouveau" class="form-select form-select-sm">
-                            <option value="">-- Catégorie --</option>
-                            <?php foreach($categories as $c): ?>
-                                <option value="<?= $c->getId() ?>"><?= $c->getNom() ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                    <div>
+                        <h2 class="mb-0 fw-bold text-dark">Enregistrer un Besoin</h2>
+                        <p class="text-muted mb-0 small">Déclarez les besoins des sinistrés pour votre ville</p>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="form-label fw-bold">Quantité</label>
-                    <input type="number" name="quantite" class="form-control" required>
+            <form action="/besoin/enregistrer" method="POST">
+                
+                <!-- ÉTAPE 1 : Localisation -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-gradient py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <h5 class="mb-0 text-white fw-bold">
+                            <span class="badge bg-white text-primary rounded-circle me-2">1</span>
+                            Localisation et Date
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark d-flex align-items-center mb-2">
+                                    <i class="bi bi-geo-alt-fill text-danger me-2 fs-5"></i> 
+                                    Ville concernée <span class="text-danger">*</span>
+                                </label>
+                                <select name="id_ville" class="form-select form-select-lg shadow-sm" required>
+                                    <option value="">Choisissez la ville...</option>
+                                    <?php foreach($villes as $v): ?>
+                                        <option value="<?= $v->getId() ?>"><?= htmlspecialchars($v->getNom()) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Sélectionnez la ville où se trouve le besoin
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark d-flex align-items-center mb-2">
+                                    <i class="bi bi-calendar3 text-primary me-2 fs-5"></i> 
+                                    Date de saisie <span class="text-danger">*</span>
+                                </label>
+                                <input type="date" name="date_saisie" class="form-control form-control-lg shadow-sm" value="<?= date('Y-m-d') ?>" required>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Date d'enregistrement du besoin
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold">Prix Unitaire</label>
-                    <input type="number" step="0.01" name="prix_unitaire" class="form-control" required>
-                </div>
-            </div>
 
-            <button type="submit" class="btn btn-success mt-4 w-100">Enregistrer le besoin</button>
-        </form>
+                <!-- ÉTAPE 2 : Type de besoin -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-gradient py-3" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <h5 class="mb-0 text-white fw-bold">
+                            <span class="badge bg-white text-danger rounded-circle me-2">2</span>
+                            Type de Besoin
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="alert alert-info border-0 shadow-sm mb-4">
+                            <i class="bi bi-lightbulb-fill me-2"></i>
+                            <strong>Conseil :</strong> Choisissez un type existant OU créez-en un nouveau si nécessaire
+                        </div>
+
+                        <div class="row g-4">
+                            <!-- Option 1 : Type existant -->
+                            <div class="col-md-6">
+                                <div class="card h-100 border-2 border-primary">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="bg-primary bg-opacity-10 rounded p-2 me-2">
+                                                <i class="bi bi-list-check text-primary fs-4"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-bold text-dark">Option 1</h6>
+                                                <small class="text-muted">Type existant</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <label class="form-label fw-bold text-dark small mb-2">
+                                            Sélectionner dans la liste
+                                        </label>
+                                        <select name="id_type_don" class="form-select form-select-lg shadow-sm">
+                                            <option value="">-- Choisir un type --</option>
+                                            <?php foreach($types as $t): ?>
+                                                <option value="<?= $t->getId() ?>"><?= htmlspecialchars($t->getNom()) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <div class="form-text mt-2">
+                                            Types déjà enregistrés dans le système
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Option 2 : Nouveau type -->
+                            <div class="col-md-6">
+                                <div class="card h-100 border-2 border-success bg-light">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="bg-success bg-opacity-10 rounded p-2 me-2">
+                                                <i class="bi bi-plus-circle-fill text-success fs-4"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-bold text-dark">Option 2</h6>
+                                                <small class="text-muted">Créer un nouveau</small>
+                                            </div>
+                                        </div>
+
+                                        <label class="form-label fw-bold text-success small mb-2">
+                                            Nom du nouveau type
+                                        </label>
+                                        <input type="text" name="nouveau_type_nom" class="form-control form-control-lg mb-3 shadow-sm" placeholder="Ex: Kit hygiène, Couverture...">
+                                        
+                                        <label class="form-label fw-bold text-success small mb-2">
+                                            Catégorie associée
+                                        </label>
+                                        <select name="id_categorie_nouveau" class="form-select shadow-sm">
+                                            <option value="">-- Sélectionner --</option>
+                                            <?php foreach($categories as $c): ?>
+                                                <option value="<?= $c->getId() ?>"><?= htmlspecialchars($c->getNom()) ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <div class="form-text mt-2">
+                                            Si le type n'existe pas encore
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ÉTAPE 3 : Quantité et Prix -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-header bg-gradient py-3" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <h5 class="mb-0 text-white fw-bold">
+                            <span class="badge bg-white text-warning rounded-circle me-2">3</span>
+                            Quantité et Valeur
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark d-flex align-items-center mb-2">
+                                    <i class="bi bi-boxes text-warning me-2 fs-5"></i> 
+                                    Quantité nécessaire <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <input type="number" name="quantite" class="form-control" placeholder="Nombre d'unités" min="1" required>
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-hash"></i> unités
+                                    </span>
+                                </div>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Nombre total d'unités requises
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold text-dark d-flex align-items-center mb-2">
+                                    <i class="bi bi-cash-coin text-success me-2 fs-5"></i> 
+                                    Prix Unitaire <span class="text-danger">*</span>
+                                </label>
+                                <div class="input-group input-group-lg shadow-sm">
+                                    <input type="number" step="0.01" name="prix_unitaire" class="form-control" placeholder="0.00" min="0" required>
+                                    <span class="input-group-text bg-light fw-bold">Ar</span>
+                                </div>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle"></i> Prix pour une unité en Ariary
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Calcul automatique visuel -->
+                        <div class="alert alert-light border mt-4 mb-0">
+                            <div class="row text-center">
+                                <div class="col">
+                                    <i class="bi bi-calculator text-muted d-block fs-3 mb-2"></i>
+                                    <small class="text-muted">Valeur totale calculée automatiquement lors de la soumission</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <a href="/" class="btn btn-lg btn-outline-secondary px-4">
+                                <i class="bi bi-x-circle me-2"></i> Annuler
+                            </a>
+                            <button type="submit" class="btn btn-lg btn-success px-5 shadow">
+                                <i class="bi bi-check-circle-fill me-2"></i> Enregistrer le Besoin
+                            </button>
+                        </div>
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                <i class="bi bi-shield-check"></i> Toutes les données sont sécurisées
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
     </div>
 </div>

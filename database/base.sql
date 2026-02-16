@@ -1,4 +1,5 @@
 -- 1️⃣ Créer la base et l'utiliser
+DROP DATABASE IF EXISTS bngrc;
 CREATE DATABASE IF NOT EXISTS bngrc;
 USE bngrc;
 

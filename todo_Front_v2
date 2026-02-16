@@ -1,0 +1,46 @@
+✅ TODO LIST — Pages FRONT pour la V2 (Design uniquement)
+🟦 1. achat_besoins.php
+
+Page listant les besoins restants par ville
+Tableau : besoin, quantité, prix unitaire, montant total
+Champ "montant d’achat" pré-calculé (avec frais %)
+Bouton Acheter
+Filtre par ville (select)
+
+🟦 2. liste_achats.php
+
+Page affichant l’historique des achats déjà réalisés
+Tableau : ville, besoin, quantité achetée, prix unitaire, frais, total payé
+Filtres : par ville, par date
+
+🟦 3. simulation.php
+
+Page simulation du dispatch
+Bouton Simuler
+Tableau résultat simulation (avant validation)
+Bouton Valider la simulation
+
+🟦 4. recapitulatif.php
+
+Page des statistiques avec rafraîchissement AJAX
+Total besoins (montant)
+Total satisfaits
+Total restants
+Bouton Actualiser (AJAX)
+
+🟦 5. layout V2 (optionnel si différent)
+
+Layout général utilisé dans V2
+Header
+Footer
+Container
+(Si identique au layout V1 → pas besoin)
+
+🧩 Organisation des fichiers (proposée)
+views/
+ └── front/
+      ├── layout.php
+      ├── achat_besoins.php
+      ├── liste_achats.php
+      ├── simulation.php
+      └── recapitulatif.php
