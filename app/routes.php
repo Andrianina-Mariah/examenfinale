@@ -13,7 +13,6 @@ require_once __DIR__ . '/repositories/TypeDonRepository.php';
 require_once __DIR__ . '/repositories/CategorieRepository.php';
 require_once __DIR__ . '/repositories/DonRepository.php';
 require_once __DIR__ . '/repositories/DispatchRepository.php';
-// require_once __DIR__ . '/repositories/*';
 
 /* AUTH */
 Flight::route('GET /', ['DashController', 'DashBoard']);
@@ -30,7 +29,3 @@ Flight::route('POST /besoin/enregistrer', ['BesoinController', 'enregistrer']);
 Flight::route('GET /don/nouveau', ['DonController', 'form']);
 
 Flight::route('POST /don/enregistrer', ['DonController', 'enregistrer']);
-
-// Flight::route('GET /login', ['AuthController', 'login']);
-// Flight::route('POST /validate/login', ['AuthController', 'validateLoginAjax']);
-

@@ -116,7 +116,7 @@
                 <div class="p-3 border-start border-end border-secondary">
                     <i class="bi bi-person-circle display-6 mb-2"></i>
                     <h6 class="fw-bold mb-1">Mariah</h6>
-                    <p class="mb-0 small opacity-75">ETU : Aucun donné</p>
+                    <p class="mb-0 small opacity-75">ETU : 4190</p>
                 </div>
             </div>
 
@@ -124,7 +124,7 @@
                 <div class="p-3">
                     <i class="bi bi-person-circle display-6 mb-2"></i>
                     <h6 class="fw-bold mb-1">Mirantsoa</h6>
-                    <p class="mb-0 small opacity-75">ETU : Aucun donné</p>
+                    <p class="mb-0 small opacity-75">ETU : 3929</p>
                 </div>
             </div>
         </div>
