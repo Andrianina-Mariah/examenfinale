@@ -1,3 +1,5 @@
+TODO LIST PARTIE 1
+
 base.sql (ETU4190)
 - créer base bngrc
 - créer table bngrc_region(id, nom)
@@ -45,87 +47,145 @@ repositories(ETU4190)
                           - getAllTypes()
                           - getTypesByCategorie()
 
-controllers(ETU4269)
-    TypeDonController.php:- afficherTypes()
-                          - ajouterType()
+controller
 
 views(ETU3929)
     type_list.php
     type_create.php
 
-gestion besoins
-models(ETU4190)
-    Besoin.php
+gestion besoins (ETU2)
 
-repositorie(ETU4190)
-    BesoinRepository.php:- createBesoin()
-                         - getBesoinByVille()
-                         - getTotalBesoinByVille()
-                         - getBesoinRestantByVille()
+model
 
-controllers(ETU4269)
-    BesoinController.php:- afficherFormBesoin()
-                         - enregistrerBesoin()
+Besoin.php
+
+BesoinRepository.php createBesoin getBesoinByVille getTotalBesoinByVille getBesoinRestantByVille
+
+controller
+
+BesoinController.php afficherFormBesoin enregistrerBesoin
 
 views(ETU3929)
     besoin_create.php
     besoin_list.php
 
-gestion dons 
-models(ETU4190)
-Don.php
-DonRepository.php createDon getAllDons
-Dispatch.php
-DispatchRepository.php createDispatch getTotalRecuByVille getRecuParTypeByVille
-
-controllers
-
-DonController.php afficherFormDon enregistrerDon simulerDispatch
-
-view
-
-don_create.php
-
-don_list.php
-
-logique dispatch (ETU2)
-
-récupérer dons triés par date_saisie
-
-récupérer besoins par ville triés par date_saisie
-
-comparer quantite don et quantite besoin restant
-
-attribuer quantite possible
-
-insérer dans dispatch
-
-continuer jusqu’à épuisement du don
-
-tableau de bord (PRIORITÉ ACTUELLE) (ETU3)
+gestion dons (ETU2)
 
 model
 
-DashboardRepository.php getResumeParVille
+Don.php
 
-requêtes nécessaires
+DonRepository.php createDon getAllDons
 
-total besoins par ville (SUM quantite besoin)
+Dispatch.php
 
-total dons reçus par ville (SUM quantite_attribuee dispatch)
-
-calcul reste = besoin - reçu
+DispatchRepository.php createDispatch getTotalRecuByVille getRecuParTypeByVille
 
 controller
 
-DashboardController.php afficherDashboard
+DonController.php afficherFormDon enregistrerDon simulerDispatch
 
-view
+views
+    don_create.php
+    don_list.php
 
-dashboard.php
-tableau colonnes :
-ville
-type_don
-quantite demandee
-quantite reçue
-reste
+logique dispatch:
+    récupérer dons triés par date_saisie
+    récupérer besoins par ville triés par date_saisie
+    comparer quantite don et quantite besoin restant
+    attribuer quantite possible
+    insérer dans dispatch
+    continuer jusqu’à épuisement du don
+
+tableau de bord 
+models(ETU4190)
+    DashboardRepository.php:- getResumeParVille()
+
+requêtes nécessaires:
+    total besoins par ville (SUM quantite besoin)
+    total dons reçus par ville (SUM quantite_attribuee dispatch)
+    calcul reste = besoin - reçu
+
+controllers(ETU4269)
+    DashboardController.php:- afficherDashboard()
+
+views(ETU3929)
+    dashboard.php
+
+
+TODO LIST PARTIE 2
+
+base.sql (ETU4190)
+modifier table besoin ajouter prix_unitaire
+modifier table don ajouter type et montant
+créer table achat(id, id_ville, id_type_don, quantite, prix_unitaire, frais_pourcentage, montant_total, date_achat)
+ajouter champ montant_utilise dans dispatch
+
+gestion achats 
+models(ETU4190)
+    Achat.php
+
+repositories(ETU4190)
+    AchatRepository.php:- createAchat()
+                        - getAchatByVille()
+                        - getTotalAchatByVille()
+    DonRepository.php:- getDonsArgentRestants()
+                      - updateMontantRestant()
+
+controllers(ETU4269)
+    AchatController.php:- afficherBesoinsRestants()
+                        - simulerAchat()
+                        - validerAchat()
+
+views(ETU3929)
+    besoins_restants.php
+        - liste besoins non satisfaits
+        - bouton acheter
+    simulation.php
+        - afficher résultat simulation
+        - bouton validation
+    achat_list.php
+        liste des achats filtrable par ville
+        logique achat
+        simulation
+        récupérer besoin restant
+        calculer montant = quantite × prix_unitaire
+        calculer frais = montant × pourcentage
+        total = montant + frais
+        vérifier dons argent restants
+        afficher résultat
+        validation
+        vérifier encore montant disponible
+        créer achat
+        diminuer montant don
+        diminuer besoin restant
+        enregistrer dispatch si nécessaire
+
+page simulation
+    bouton simuler
+    bouton valider
+    message erreur si argent insuffisant
+    message erreur si don déjà utilisé
+
+page récapitulation
+models(ETU4190)
+
+repositories(ETU4190)
+    RecapRepository.php:- getTotalBesoinsMontant()
+                        - getTotalSatisfaitMontant()
+                        - getTotalRestantMontant()
+
+controllers(ETU4269)
+    RecapController.php:- afficherRecap()
+
+views(ETU3929)
+    recap.php
+        total besoins
+        total satisfaits
+        total restants
+        bouton actualiser (Ajax)
+
+Ajax
+    route GET /recap/data
+    retourne JSON
+    mise à jour sans refresh
