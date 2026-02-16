@@ -52,4 +52,55 @@ class BesoinRepository {
         $st->execute([(int)$id_ville, (int)$id_ville]);
         return (int)$st->fetchColumn();
     }
+    public function getBesoinAvecDispatchParVille($id_ville) {
+        $sql = "
+            SELECT 
+                b.id AS besoin_id,
+                b.id_ville,
+                b.id_type_don,
+                b.quantite AS besoin_quantite,
+                b.prix_unitaire,
+                b.date_saisie AS besoin_date,
+                d.id AS dispatch_id,
+                d.quantite_attribuee,
+                d.date_dispatch
+            FROM bngrc_besoin b
+            LEFT JOIN bngrc_dispatch d ON b.id = d.id_besoin
+            WHERE b.id_ville = ?
+        ";
+
+        $st = $this->pdo->prepare($sql);
+        $st->execute([(int)$id_ville]);
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC);
+
+        $result = [];
+        foreach ($rows as $row) {
+            $besoin = new Besoin(
+                $row['besoin_id'],
+                $row['id_ville'],
+                $row['id_type_don'],
+                $row['besoin_quantite'],
+                $row['prix_unitaire'],
+                $row['besoin_date']
+            );
+
+            // On inclut aussi les infos du dispatch si existant
+            $dispatch = null;
+            if ($row['dispatch_id'] !== null) {
+                $dispatch = [
+                    'id' => $row['dispatch_id'],
+                    'quantite_attribuee' => $row['quantite_attribuee'],
+                    'date_dispatch' => $row['date_dispatch']
+                ];
+            }
+
+            $result[] = [
+                'besoin' => $besoin,
+                'dispatch' => $dispatch
+            ];
+        }
+
+        return $result;
+    }
+
 }
