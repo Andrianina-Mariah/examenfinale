@@ -152,4 +152,57 @@ class BesoinRepository {
         $st->execute([(int)$id_ville, (int)$id_type_don]);
         return (int)$st->fetchColumn();
     }
+
+    // public function getBesoinsRestantsPourAchat($id_ville = null) {
+    //     $sql = "
+    //         SELECT 
+    //             b.id as besoin_id, b.id_ville, v.nom as ville_nom,
+    //             td.nom as type_nom, b.prix_unitaire,
+    //             -- Reste = Quantité initiale - (Dons directs) - (Achats déjà faits)
+    //             (b.quantite - 
+    //                 COALESCE((SELECT SUM(dp.quantite_attribuee) FROM bngrc_dispatch dp JOIN bngrc_don d ON dp.id_don = d.id WHERE d.id_type_don = b.id_type_don AND dp.id_ville = b.id_ville), 0) -
+    //                 COALESCE((SELECT SUM(ac.quantite_achetee) FROM bngrc_achat ac WHERE ac.id_type_don = b.id_type_don AND ac.id_ville = b.id_ville), 0)
+    //             ) as qte_restante,
+    //             -- Vérifier si un stock physique existe encore (pour bloquer l'achat inutile)
+    //             (SELECT COALESCE(SUM(d.quantite), 0) - COALESCE((SELECT SUM(dp.quantite_attribuee) FROM bngrc_dispatch dp WHERE dp.id_don = d.id), 0)
+    //             FROM bngrc_don d WHERE d.id_type_don = b.id_type_don AND (d.montant IS NULL OR d.montant = 0)
+    //             ) as stock_nature_dispo
+    //         FROM bngrc_besoin b
+    //         JOIN bngrc_ville v ON b.id_ville = v.id
+    //         JOIN bngrc_type_don td ON b.id_type_don = td.id
+    //         WHERE td.nom != 'Argent'
+    //         HAVING qte_restante > 0
+    //     ";
+        
+    //     if ($id_ville) $sql .= " AND b.id_ville = " . (int)$id_ville;
+    //     $sql .= " ORDER BY b.date_saisie ASC";
+
+    //     return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    // }
+
+    public function getBesoinsRestantsPourAchat($id_ville = null) {
+        $sql = "
+            SELECT 
+                b.id as besoin_id, b.id_ville, v.nom as ville_nom,
+                td.nom as type_nom, b.prix_unitaire,
+                -- Reste = Besoin initial - Dispatchs directs - Achats par argent
+                (b.quantite - 
+                    COALESCE((SELECT SUM(dp.quantite_attribuee) FROM bngrc_dispatch dp JOIN bngrc_don d ON dp.id_don = d.id WHERE d.id_type_don = b.id_type_don AND dp.id_ville = b.id_ville), 0) -
+                    COALESCE((SELECT SUM(ac.quantite_achetee) FROM bngrc_achat ac WHERE ac.id_type_don = b.id_type_don AND ac.id_ville = b.id_ville), 0)
+                ) as qte_restante,
+                -- Stock disponible en dons PHYSIQUES uniquement (montant IS NULL ou 0)
+                (SELECT SUM(d.quantite) - COALESCE((SELECT SUM(dp.quantite_attribuee) FROM bngrc_dispatch dp WHERE dp.id_don = d.id), 0)
+                FROM bngrc_don d 
+                WHERE d.id_type_don = b.id_type_don AND (d.montant IS NULL OR d.montant = 0)
+                ) as stock_nature_dispo
+            FROM bngrc_besoin b
+            JOIN bngrc_ville v ON b.id_ville = v.id
+            JOIN bngrc_type_don td ON b.id_type_don = td.id
+            WHERE td.nom != 'Argent'
+            HAVING qte_restante > 0
+        ";
+        
+        if ($id_ville) $sql .= " AND b.id_ville = " . (int)$id_ville;
+        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/controllers/AuthController.php';
+require_once __DIR__ . '/controllers/AchatController.php';
 require_once __DIR__ . '/controllers/DashController.php';
 require_once __DIR__ . '/controllers/BesoinController.php';
 require_once __DIR__ . '/controllers/DonController.php';
@@ -31,7 +31,11 @@ Flight::route('GET /don/nouveau', ['DonController', 'form']);
 Flight::route('POST /don/enregistrer', ['DonController', 'enregistrer']);
 
 /* V2 - FRONT */
-Flight::route('GET /achats/besoins', ['DashController', 'achatBesoins']);
-Flight::route('GET /achats/liste', ['DashController', 'listeAchats']);
-Flight::route('GET /simulation', ['DashController', 'simulation']);
-Flight::route('GET /recapitulatif', ['DashController', 'recapitulatif']);
+
+Flight::route('GET /achats/besoins', ['AchatController', 'pageAchats']);
+Flight::route('POST /achats/effectuer', ['AchatController', 'effectuerAchat']);
+
+// Flight::route('GET /achats/besoins', ['DashController', 'achatBesoins']);
+// Flight::route('GET /achats/liste', ['DashController', 'listeAchats']);
+// Flight::route('GET /simulation', ['DashController', 'simulation']);
+// Flight::route('GET /recapitulatif', ['DashController', 'recapitulatif']);

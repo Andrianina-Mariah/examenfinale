@@ -139,3 +139,6 @@ CREATE TABLE bngrc_config (
 );
 
 INSERT INTO bngrc_config (frais_pourcentage) VALUES (10.00);
+
+INSERT INTO bngrc_don (id_type_don, montant, date_saisie, quantite, montant_restant) VALUES
+(7, 1000000, '2026-02-16', 0, 1000000);
