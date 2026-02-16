@@ -24,8 +24,8 @@
             <i class="bi bi-cpu text-primary display-4 d-block mb-3"></i>
             <h5 class="fw-bold text-dark mb-2">Lancer une simulation de dispatch</h5>
             <p class="text-muted mb-4">
-                Le système va automatiquement répartir les dons disponibles
-                vers les villes ayant des besoins non satisfaits.
+                Le système va répartir les dons disponibles vers les villes ayant des besoins non satisfaits,<br>
+                <strong>par ordre de date et de saisie</strong> (les dons les plus anciens sont dispatchés en premier).
             </p>
             <button class="btn btn-primary btn-lg px-5 shadow" id="btn-simuler">
                 <i class="bi bi-play-circle-fill me-2"></i> Simuler le Dispatch

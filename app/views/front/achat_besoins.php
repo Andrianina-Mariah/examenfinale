@@ -7,7 +7,7 @@
         </div>
         <div>
             <h2 class="fw-bold text-dark mb-0">Achats des Besoins</h2>
-            <p class="text-muted mb-0">Consultez et achetez les besoins restants par ville</p>
+            <p class="text-muted mb-0">Achetez les besoins en nature et matériaux via les <strong>dons en argent</strong></p>
         </div>
     </div>
 
@@ -46,38 +46,74 @@
         </div>
     </div>
 
+    <!-- Zone d'erreur (si l'achat existe encore dans les dons restants) -->
+    <div class="alert alert-danger alert-dismissible fade show d-none rounded-3 shadow-sm" role="alert" id="alerte-achat-existant">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-octagon-fill fs-4 me-3"></i>
+            <div>
+                <strong>Achat impossible !</strong>
+                <span id="msg-erreur-achat">Ce besoin existe encore dans les dons restants. Utilisez le dispatch au lieu d'acheter.</span>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Info frais d'achat -->
+    <div class="card shadow-sm border-0 rounded-3 mb-4 border-start border-warning border-4">
+        <div class="card-body p-3 d-flex align-items-center">
+            <i class="bi bi-info-circle-fill text-warning fs-4 me-3"></i>
+            <div>
+                <span class="fw-bold text-dark">Frais d'achat configurables :</span>
+                <span class="text-muted">Un taux de <strong class="text-warning" id="taux-frais">10%</strong> est appliqué sur chaque achat.
+                (Ex : achat de 100 Ar → total = <strong>110 Ar</strong>)</span>
+            </div>
+        </div>
+    </div>
+
     <!-- Résumé rapide -->
     <div class="row g-4 mb-5">
-        <div class="col-md-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 rounded-3 h-100 border-start border-primary border-4">
+                <div class="card-body p-4 text-center">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px;height:48px;">
+                        <i class="bi bi-wallet2 text-primary fs-5"></i>
+                    </div>
+                    <h6 class="text-muted small mb-1">SOLDE DONS ARGENT</h6>
+                    <h3 class="fw-bold text-primary mb-0" id="solde-argent">0 Ar</h3>
+                    <small class="text-muted">Disponible pour achats</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
             <div class="card shadow-sm border-0 rounded-3 h-100">
                 <div class="card-body p-4 text-center">
                     <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px;height:48px;">
                         <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
                     </div>
                     <h6 class="text-muted small mb-1">BESOINS RESTANTS</h6>
-                    <h3 class="fw-bold text-danger mb-0"><!-- données dynamiques ici -->0</h3>
+                    <h3 class="fw-bold text-danger mb-0">0</h3>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card shadow-sm border-0 rounded-3 h-100">
                 <div class="card-body p-4 text-center">
                     <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px;height:48px;">
                         <i class="bi bi-cash-stack text-warning fs-5"></i>
                     </div>
                     <h6 class="text-muted small mb-1">MONTANT ESTIMÉ</h6>
-                    <h3 class="fw-bold text-warning mb-0"><!-- données dynamiques ici -->0 Ar</h3>
+                    <h3 class="fw-bold text-warning mb-0">0 Ar</h3>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card shadow-sm border-0 rounded-3 h-100">
                 <div class="card-body p-4 text-center">
                     <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width:48px;height:48px;">
                         <i class="bi bi-bag-check-fill text-success fs-5"></i>
                     </div>
                     <h6 class="text-muted small mb-1">ACHATS EFFECTUÉS</h6>
-                    <h3 class="fw-bold text-success mb-0"><!-- données dynamiques ici -->0</h3>
+                    <h3 class="fw-bold text-success mb-0">0</h3>
                 </div>
             </div>
         </div>
@@ -98,29 +134,40 @@
                         <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">
                             <i class="bi bi-geo-alt-fill me-1"></i> Ville A
                         </span>
-                        <span class="badge bg-light text-dark border">Besoin #1</span>
+                        <span class="badge bg-light text-dark border">Nature</span>
                     </div>
-                    <h6 class="fw-bold text-dark mb-3">Aucun donné</h6>
+                    <h6 class="fw-bold text-dark mb-2">Aucun donné</h6>
                     <div class="row g-2 mb-3">
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="bg-light rounded-3 p-2 text-center">
-                                <small class="text-muted d-block">Quantité</small>
+                                <small class="text-muted d-block">Qté restante</small>
                                 <strong class="text-dark">0</strong>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="bg-light rounded-3 p-2 text-center">
                                 <small class="text-muted d-block">P.U.</small>
                                 <strong class="text-dark">0 Ar</strong>
                             </div>
                         </div>
+                        <div class="col-4">
+                            <div class="bg-warning bg-opacity-10 rounded-3 p-2 text-center">
+                                <small class="text-muted d-block">Frais</small>
+                                <strong class="text-warning">10%</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Saisie quantité à acheter -->
+                    <div class="mb-3">
+                        <label class="form-label small text-muted fw-bold">Quantité à acheter</label>
+                        <input type="number" class="form-control shadow-sm qte-achat" min="1" max="0" placeholder="Saisir la quantité">
                     </div>
                     <div class="bg-warning bg-opacity-10 rounded-3 p-3 mb-3 text-center">
-                        <small class="text-muted d-block mb-1">Montant total (+ frais)</small>
-                        <h5 class="fw-bold text-warning mb-0">0 Ar</h5>
+                        <small class="text-muted d-block mb-1">Total (P.U. × Qté + Frais)</small>
+                        <h5 class="fw-bold text-warning mb-0 total-achat">0 Ar</h5>
                     </div>
                     <div class="d-grid">
-                        <button class="btn btn-success shadow-sm">
+                        <button class="btn btn-success shadow-sm btn-acheter">
                             <i class="bi bi-cart-plus me-1"></i> Acheter
                         </button>
                     </div>
@@ -136,29 +183,40 @@
                         <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">
                             <i class="bi bi-geo-alt-fill me-1"></i> Ville B
                         </span>
-                        <span class="badge bg-light text-dark border">Besoin #2</span>
+                        <span class="badge bg-light text-dark border">Matériaux</span>
                     </div>
-                    <h6 class="fw-bold text-dark mb-3">Aucun donné</h6>
+                    <h6 class="fw-bold text-dark mb-2">Aucun donné</h6>
                     <div class="row g-2 mb-3">
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="bg-light rounded-3 p-2 text-center">
-                                <small class="text-muted d-block">Quantité</small>
+                                <small class="text-muted d-block">Qté restante</small>
                                 <strong class="text-dark">0</strong>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="bg-light rounded-3 p-2 text-center">
                                 <small class="text-muted d-block">P.U.</small>
                                 <strong class="text-dark">0 Ar</strong>
                             </div>
                         </div>
+                        <div class="col-4">
+                            <div class="bg-warning bg-opacity-10 rounded-3 p-2 text-center">
+                                <small class="text-muted d-block">Frais</small>
+                                <strong class="text-warning">10%</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Saisie quantité à acheter -->
+                    <div class="mb-3">
+                        <label class="form-label small text-muted fw-bold">Quantité à acheter</label>
+                        <input type="number" class="form-control shadow-sm qte-achat" min="1" max="0" placeholder="Saisir la quantité">
                     </div>
                     <div class="bg-warning bg-opacity-10 rounded-3 p-3 mb-3 text-center">
-                        <small class="text-muted d-block mb-1">Montant total (+ frais)</small>
-                        <h5 class="fw-bold text-warning mb-0">0 Ar</h5>
+                        <small class="text-muted d-block mb-1">Total (P.U. × Qté + Frais)</small>
+                        <h5 class="fw-bold text-warning mb-0 total-achat">0 Ar</h5>
                     </div>
                     <div class="d-grid">
-                        <button class="btn btn-success shadow-sm">
+                        <button class="btn btn-success shadow-sm btn-acheter">
                             <i class="bi bi-cart-plus me-1"></i> Acheter
                         </button>
                     </div>
@@ -174,29 +232,40 @@
                         <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">
                             <i class="bi bi-geo-alt-fill me-1"></i> Ville C
                         </span>
-                        <span class="badge bg-light text-dark border">Besoin #3</span>
+                        <span class="badge bg-light text-dark border">Matériaux</span>
                     </div>
-                    <h6 class="fw-bold text-dark mb-3">Aucun donné</h6>
+                    <h6 class="fw-bold text-dark mb-2">Aucun donné</h6>
                     <div class="row g-2 mb-3">
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="bg-light rounded-3 p-2 text-center">
-                                <small class="text-muted d-block">Quantité</small>
+                                <small class="text-muted d-block">Qté restante</small>
                                 <strong class="text-dark">0</strong>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="bg-light rounded-3 p-2 text-center">
                                 <small class="text-muted d-block">P.U.</small>
                                 <strong class="text-dark">0 Ar</strong>
                             </div>
                         </div>
+                        <div class="col-4">
+                            <div class="bg-warning bg-opacity-10 rounded-3 p-2 text-center">
+                                <small class="text-muted d-block">Frais</small>
+                                <strong class="text-warning">10%</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Saisie quantité à acheter -->
+                    <div class="mb-3">
+                        <label class="form-label small text-muted fw-bold">Quantité à acheter</label>
+                        <input type="number" class="form-control shadow-sm qte-achat" min="1" max="0" placeholder="Saisir la quantité">
                     </div>
                     <div class="bg-warning bg-opacity-10 rounded-3 p-3 mb-3 text-center">
-                        <small class="text-muted d-block mb-1">Montant total (+ frais)</small>
-                        <h5 class="fw-bold text-warning mb-0">0 Ar</h5>
+                        <small class="text-muted d-block mb-1">Total (P.U. × Qté + Frais)</small>
+                        <h5 class="fw-bold text-warning mb-0 total-achat">0 Ar</h5>
                     </div>
                     <div class="d-grid">
-                        <button class="btn btn-success shadow-sm">
+                        <button class="btn btn-success shadow-sm btn-acheter">
                             <i class="bi bi-cart-plus me-1"></i> Acheter
                         </button>
                     </div>

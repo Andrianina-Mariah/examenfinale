@@ -51,7 +51,7 @@
                         <h6 class="text-muted small mb-0">SATISFAITS</h6>
                     </div>
                     <h3 class="fw-bold text-success mb-1" id="stat-satisfaits">0 Ar</h3>
-                    <small class="text-muted">Besoins complètement comblés</small>
+                    <small class="text-muted">Montant des besoins satisfaits</small>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                         <h6 class="text-muted small mb-0">RESTANTS</h6>
                     </div>
                     <h3 class="fw-bold text-danger mb-1" id="stat-restants">0 Ar</h3>
-                    <small class="text-muted">Besoins non encore satisfaits</small>
+                    <small class="text-muted">Montant des besoins restants</small>
                 </div>
             </div>
         </div>
