@@ -1,0 +1,17 @@
+ty le mandefa anle travaille tao amle branche manakany am dev
+git checkout dev
+git merge mariah (anaranle branche)
+git push
+
+de ty maka anle zavatra vita ao @ dev 
+git checkout dev
+git pull
+
+Mi push
+git status
+git add .
+git commit -m "message"
+git push
+
+Mi pull
+git pull
