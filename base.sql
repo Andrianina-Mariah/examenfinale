@@ -84,27 +84,25 @@ INSERT INTO bngrc_ville (nom, id_region) VALUES
 ('Bongolava Ville', 3);
 
 INSERT INTO bngrc_categorie (nom) VALUES
-('Nourriture'),
-('Medicaments'),
-('Vêtements');
+('Nature'),
+('Materiaux'),
+('Argent');
 
 INSERT INTO bngrc_type_don (nom, id_categorie) VALUES
 ('Riz', 1),
 ('Pâtes', 1),
 ('Paracétamol', 2),
-('Masques', 2),
-('T-shirt', 3),
-('Couverture', 3);
+('Masques', 2);
 
 INSERT INTO bngrc_besoin (id_ville, id_type_don, quantite, prix_unitaire, date_saisie) VALUES
 (1, 1, 100, 2.50, '2026-02-16'),
 (2, 3, 50, 1.20, '2026-02-16'),
-(3, 6, 30, 5.00, '2026-02-16');
+(3, 4, 30, 5.00, '2026-02-16');
 
 INSERT INTO bngrc_don (id_type_don, quantite, date_saisie) VALUES
 (1, 50, '2026-02-16'),
 (3, 20, '2026-02-16'),
-(6, 10, '2026-02-16');
+(4, 10, '2026-02-16');
 
 INSERT INTO bngrc_dispatch (id_don, id_ville, quantite_attribuee, date_dispatch) VALUES
 (1, 1, 30, '2026-02-16'),
