@@ -108,3 +108,32 @@ INSERT INTO bngrc_dispatch (id_don, id_ville, quantite_attribuee, date_dispatch)
 (1, 1, 30, '2026-02-16'),
 (2, 2, 10, '2026-02-16'),
 (3, 3, 5, '2026-02-16');
+
+ALTER TABLE bngrc_don
+ADD COLUMN montant DECIMAL(12,2) DEFAULT NULL,
+ADD COLUMN montant_restant DECIMAL(12,2) DEFAULT NULL;
+
+CREATE TABLE bngrc_achat (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_ville INT NOT NULL,
+    id_type_don INT NOT NULL,
+    quantite_achetee INT NOT NULL,
+    prix_unitaire DECIMAL(10,2) NOT NULL,
+    frais_pourcentage DECIMAL(5,2) NOT NULL,
+    montant_total DECIMAL(12,2) NOT NULL,
+    date_achat DATE NOT NULL,
+    FOREIGN KEY (id_ville) REFERENCES bngrc_ville(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (id_type_don) REFERENCES bngrc_type_don(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE TABLE bngrc_config (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    frais_pourcentage DECIMAL(5,2) NOT NULL
+);
+
+INSERT INTO bngrc_config (frais_pourcentage) VALUES (10.00);
+
