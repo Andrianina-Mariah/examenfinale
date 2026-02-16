@@ -89,6 +89,9 @@ INSERT INTO bngrc_categorie (nom) VALUES
 ('Argent');
 
 INSERT INTO bngrc_type_don (nom, id_categorie) VALUES
+('Argent', 3);
+
+INSERT INTO bngrc_type_don (nom, id_categorie) VALUES
 ('Riz', 1),
 ('Pâtes', 1),
 ('Paracétamol', 2),
@@ -136,4 +139,3 @@ CREATE TABLE bngrc_config (
 );
 
 INSERT INTO bngrc_config (frais_pourcentage) VALUES (10.00);
-
