@@ -1,58 +1,42 @@
-base.sql (ETU1)
+base.sql (ETU4190)
+- créer base bngrc
+- créer table bngrc_region(id, nom)
+- créer table bngrc_ville(id, nom, id_region)
+- créer table bngrc_categorie(id, nom)
+- créer table bngrc_type_don(id, nom, id_categorie)
+- créer table bngrc_besoin(id, id_ville, id_type_don, quantite, prix_unitaire, date_saisie)
+- créer table bngrc_don(id, id_type_don, quantite, date_saisie)
+- créer table dngrc_dispatch(id, id_don, id_ville, quantite_attribuee, date_dispatch)
+- insérer données test
 
-créer base bngrc
+gestion region et ville
+model(ETU4190)
+    Region.php
+    Ville.php
+    RegionRepository.php:- createRegion()
+                         - getAllRegions()
+    VilleRepository.php:- createVille()
+                        - getAllVilles() 
+                        - getVilleById()
 
-créer table region(id, nom)
+controller(ETU4269)
+    VilleController.php:- afficherListeVilles()
+                        - afficherDetailVille()
 
-créer table ville(id, nom, id_region)
+view(ETU3929)
+    region_list.php
+    ville_list.php
+    ville_detail.php
 
-créer table categorie(id, nom)
-
-créer table type_don(id, nom, id_categorie)
-
-créer table besoin(id, id_ville, id_type_don, quantite, date_saisie)
-
-créer table don(id, id_type_don, quantite, date_saisie)
-
-créer table dispatch(id, id_don, id_ville, quantite_attribuee, date_dispatch)
-
-insérer données test
-
-gestion region et ville (ETU1)
-
-model
-
-Region.php
-
-Ville.php
-
-RegionDAO.php createRegion getAllRegions
-
-VilleDAO.php createVille getAllVilles getVilleById
-
-controller
-
-VilleController.php afficherListeVilles afficherDetailVille
-
-view
-
-region_list.php
-
-ville_list.php
-
-ville_detail.php
-
-gestion type et categorie (ETU1)
-
-model
-
-Categorie.php
-
-TypeDon.php
-
-CategorieDAO.php createCategorie getAllCategories
-
-TypeDonDAO.php createTypeDon getAllTypes getTypesByCategorie
+gestion type et categorie
+model(ETU4190)
+    Categorie.php
+    TypeDon.php
+    CategorieRepository.php:- createCategorie()
+                            - getAllCategories()
+    TypeDonRepository.php:- createTypeDon()
+                          - getAllTypes()
+                          - getTypesByCategorie()
 
 controller
 
@@ -70,7 +54,7 @@ model
 
 Besoin.php
 
-BesoinDAO.php createBesoin getBesoinByVille getTotalBesoinByVille getBesoinRestantByVille
+BesoinRepository.php createBesoin getBesoinByVille getTotalBesoinByVille getBesoinRestantByVille
 
 controller
 
@@ -88,11 +72,11 @@ model
 
 Don.php
 
-DonDAO.php createDon getAllDons
+DonRepository.php createDon getAllDons
 
 Dispatch.php
 
-DispatchDAO.php createDispatch getTotalRecuByVille getRecuParTypeByVille
+DispatchRepository.php createDispatch getTotalRecuByVille getRecuParTypeByVille
 
 controller
 
@@ -122,7 +106,7 @@ tableau de bord (PRIORITÉ ACTUELLE) (ETU3)
 
 model
 
-DashboardDAO.php getResumeParVille
+DashboardRepository.php getResumeParVille
 
 requêtes nécessaires
 
