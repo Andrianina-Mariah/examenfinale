@@ -137,3 +137,9 @@ CREATE TABLE bngrc_config (
 
 INSERT INTO bngrc_config (frais_pourcentage) VALUES (10.00);
 
+--modif
+ALTER TABLE bngrc_don MODIFY COLUMN quantite INT DEFAULT NULL;
+
+ALTER TABLE bngrc_besoin MODIFY COLUMN quantite INT DEFAULT NULL;
+ALTER TABLE bngrc_besoin MODIFY COLUMN prix_unitaire DECIMAL(10,2) DEFAULT NULL;
+ALTER TABLE bngrc_besoin ADD COLUMN montant DECIMAL(12,2) DEFAULT NULL;

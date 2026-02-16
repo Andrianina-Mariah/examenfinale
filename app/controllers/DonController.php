@@ -31,6 +31,7 @@ class DonController {
             $dispatchRepo = new DispatchRepository($pdo); // À ajouter
 
             $id_type_don = $data->id_type_don;
+            $catRepo = new CategorieRepository($pdo);
 
             // 1. Gestion nouveau type
             if (!empty($data->nouveau_type_nom)) {
@@ -40,13 +41,29 @@ class DonController {
             // 2. Déterminer le type de catégorie et la date
             $date_saisie = date('Y-m-d'); // date actuelle
             $type_categorie = $data->type_categorie ?? 'materiel'; // par défaut materiel si non précisé
+            
+            // 2.1 Si c'est de l'argent et pas de type sélectionné, utiliser un type par défaut
+            if ($type_categorie === 'argent' && empty($id_type_don)) {
+                // Trouver l'id de la catégorie Argent
+                $categories = $catRepo->getAllCategories();
+                $id_categorie_argent = null;
+                foreach ($categories as $cat) {
+                    if (strtolower($cat->getNom()) === 'argent') {
+                        $id_categorie_argent = $cat->getId();
+                        break;
+                    }
+                }
+                if ($id_categorie_argent) {
+                    $id_type_don = $typeRepo->getOrCreateTypeArgent($id_categorie_argent);
+                }
+            }
 
             // 3. Création du don selon la catégorie
             if ($type_categorie === 'argent') {
                 $quantite = null;
-                $montant = (float)$data->montant ?? 0;
+                $montant = (float)($data->montant_argent ?? 0);
             } else {
-                $quantite = (int)$data->quantite ?? 0;
+                $quantite = (int)($data->quantite ?? 0);
                 $montant = 0;
             }
 

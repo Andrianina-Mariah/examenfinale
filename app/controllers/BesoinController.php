@@ -40,46 +40,79 @@ class BesoinController {
             $dispatchRepo = new DispatchRepository($pdo);
 
             $id_type_don = $data->id_type_don;
+            $catRepo = new CategorieRepository($pdo);
 
             // 1. Gestion nouveau type (si applicable au formulaire de besoin)
             if (!empty($data->nouveau_type_nom)) {
                 $id_type_don = $typeRepo->createTypeDon($data->nouveau_type_nom, $data->id_categorie_nouveau);
             }
 
-            // 2. Création du besoin initial
+            // 2. Déterminer le type de catégorie
+            $type_categorie = $data->type_categorie ?? 'materiel';
+            
+            // 2.1 Si c'est de l'argent et pas de type sélectionné, utiliser un type par défaut
+            if ($type_categorie === 'argent' && empty($id_type_don)) {
+                $categories = $catRepo->getAllCategories();
+                $id_categorie_argent = null;
+                foreach ($categories as $cat) {
+                    if (strtolower($cat->getNom()) === 'argent') {
+                        $id_categorie_argent = $cat->getId();
+                        break;
+                    }
+                }
+                if ($id_categorie_argent) {
+                    $id_type_don = $typeRepo->getOrCreateTypeArgent($id_categorie_argent);
+                }
+            }
+
+            // 3. Création du besoin selon la catégorie
+            if ($type_categorie === 'argent') {
+                $quantite = null;
+                $prix_unitaire = null;
+                $montant = (float)($data->montant_argent ?? 0);
+            } else {
+                $quantite = (int)($data->quantite ?? 0);
+                $prix_unitaire = (float)($data->prix_unitaire ?? 0);
+                $montant = null;
+            }
+
+            // 4. Création du besoin initial
             $besoinRepo->createBesoin(
                 $data->id_ville,
                 $id_type_don,
-                $data->quantite,
-                $data->prix_unitaire,
-                $data->date_saisie
+                $quantite,
+                $prix_unitaire,
+                $data->date_saisie,
+                $montant
             );
             
-            // --- LOGIQUE DE SATISFACTION IMMÉDIATE DU BESOIN ---
-            $quantiteBesoinRestante = (int)$data->quantite;
-            $id_ville = (int)$data->id_ville;
-            $dateAujourdhui = date('Y-m-d');
+            // --- LOGIQUE DE SATISFACTION IMMÉDIATE DU BESOIN (seulement pour Nature/Matériel) ---
+            if ($type_categorie !== 'argent' && $quantite > 0) {
+                $quantiteBesoinRestante = (int)$quantite;
+                $id_ville = (int)$data->id_ville;
+                $dateAujourdhui = date('Y-m-d');
 
-            // Récupérer les dons disponibles pour ce produit (le plus vieux don en premier)
-            $donsDispos = $donRepo->getDonsDisponiblesParType($id_type_don);
+                // Récupérer les dons disponibles pour ce produit (le plus vieux don en premier)
+                $donsDispos = $donRepo->getDonsDisponiblesParType($id_type_don);
 
-            foreach ($donsDispos as $don) {
-                if ($quantiteBesoinRestante <= 0) break; // Le besoin est comblé
+                foreach ($donsDispos as $don) {
+                    if ($quantiteBesoinRestante <= 0) break; // Le besoin est comblé
 
-                $stockDispo = (int)$don['stock_restant'];
-                
-                // On prend le maximum possible entre le besoin restant et le stock du don
-                $quantiteAPrendre = min($quantiteBesoinRestante, $stockDispo);
+                    $stockDispo = (int)$don['stock_restant'];
+                    
+                    // On prend le maximum possible entre le besoin restant et le stock du don
+                    $quantiteAPrendre = min($quantiteBesoinRestante, $stockDispo);
 
-                if ($quantiteAPrendre > 0) {
-                    $dispatchRepo->createDispatch(
-                        $don['id'],
-                        $id_ville,
-                        $quantiteAPrendre,
-                        $dateAujourdhui
-                    );
+                    if ($quantiteAPrendre > 0) {
+                        $dispatchRepo->createDispatch(
+                            $don['id'],
+                            $id_ville,
+                            $quantiteAPrendre,
+                            $dateAujourdhui
+                        );
 
-                    $quantiteBesoinRestante -= $quantiteAPrendre;
+                        $quantiteBesoinRestante -= $quantiteAPrendre;
+                    }
                 }
             }
             // ---------------------------------------------------

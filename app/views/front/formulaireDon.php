@@ -33,13 +33,34 @@
                             
                             <div class="row g-4">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold text-dark">Type de Don (Existant)</label>
-                                    <select name="id_type_don" class="form-select form-select-lg">
-                                        <option value="">-- Sélectionner si présent --</option>
-                                        <?php foreach($types as $t): ?>
-                                            <option value="<?= $t->getId() ?>"><?= htmlspecialchars($t->getNom()) ?></option>
+                                    <label class="form-label fw-bold text-dark">
+                                        <i class="bi bi-tag-fill text-success me-1"></i> Catégorie
+                                    </label>
+                                    <select id="categorie_don" class="form-select form-select-lg mb-3">
+                                        <option value="">-- Choisir une catégorie --</option>
+                                        <?php foreach($categories as $c): ?>
+                                            <option value="<?= $c->getId() ?>" data-nom="<?= strtolower(htmlspecialchars($c->getNom())) ?>"><?= htmlspecialchars($c->getNom()) ?></option>
                                         <?php endforeach; ?>
                                     </select>
+                                    
+                                    <!-- Liste déroulante des types (pour Nature et Materiel) -->
+                                    <div id="type_don_container_don">
+                                        <label class="form-label fw-bold text-dark">Type de Don</label>
+                                        <select name="id_type_don" id="type_don_select_don" class="form-select form-select-lg">
+                                            <option value="">-- Sélectionnez d'abord une catégorie --</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Input montant (pour Argent) -->
+                                    <div id="montant_container_don" style="display: none;">
+                                        <label class="form-label fw-bold text-dark">
+                                            <i class="bi bi-cash-coin text-success me-1"></i> Montant en Ariary
+                                        </label>
+                                        <div class="input-group input-group-lg">
+                                            <input type="number" name="montant_argent" id="montant_argent_don" class="form-control" placeholder="0" min="0" step="1">
+                                            <span class="input-group-text bg-light fw-bold">Ar</span>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="col-md-6">
@@ -58,12 +79,81 @@
                                         </select>
                                     </div>
                                 </div>
+                                
+                                <!-- Script pour le formulaire don -->
+                                <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    // Données des types groupés par catégorie
+                                    const typesByCategorie = {
+                                        <?php foreach($categories as $c): ?>
+                                        <?= $c->getId() ?>: [
+                                            <?php foreach($types as $t): ?>
+                                                <?php if($t->getIdCategorie() == $c->getId()): ?>
+                                            {id: <?= $t->getId() ?>, nom: "<?= addslashes(htmlspecialchars($t->getNom())) ?>"},
+                                                <?php endif; ?>
+                                            <?php endforeach; ?>
+                                        ],
+                                        <?php endforeach; ?>
+                                    };
+                                    
+                                    const categorieSelect = document.getElementById('categorie_don');
+                                    const typeDonContainer = document.getElementById('type_don_container_don');
+                                    const typeDonSelect = document.getElementById('type_don_select_don');
+                                    const montantContainer = document.getElementById('montant_container_don');
+                                    const montantInput = document.getElementById('montant_argent_don');
+                                    const quantiteContainer = document.getElementById('quantite_container_don');
+                                    const quantiteInput = document.getElementById('quantite_don');
+                                    const typeCategorieInput = document.getElementById('type_categorie');
+                                    
+                                    categorieSelect.addEventListener('change', function() {
+                                        const selectedOption = this.options[this.selectedIndex];
+                                        const categorieNom = selectedOption.dataset.nom || '';
+                                        const categorieId = this.value;
+                                        
+                                        if (categorieNom.includes('argent')) {
+                                            // Afficher l'input montant, cacher la liste des types et la quantité
+                                            typeDonContainer.style.display = 'none';
+                                            montantContainer.style.display = 'block';
+                                            quantiteContainer.style.display = 'none';
+                                            typeDonSelect.value = '';
+                                            typeDonSelect.removeAttribute('required');
+                                            quantiteInput.removeAttribute('required');
+                                            quantiteInput.value = '';
+                                            montantInput.setAttribute('required', 'required');
+                                            typeCategorieInput.value = 'argent';
+                                        } else {
+                                            // Afficher la liste des types et la quantité, cacher l'input montant
+                                            typeDonContainer.style.display = 'block';
+                                            montantContainer.style.display = 'none';
+                                            quantiteContainer.style.display = 'block';
+                                            montantInput.value = '';
+                                            montantInput.removeAttribute('required');
+                                            quantiteInput.setAttribute('required', 'required');
+                                            typeCategorieInput.value = 'materiel';
+                                            
+                                            // Remplir la liste des types
+                                            typeDonSelect.innerHTML = '<option value="">-- Choisir un type --</option>';
+                                            if (categorieId && typesByCategorie[categorieId]) {
+                                                typesByCategorie[categorieId].forEach(function(type) {
+                                                    const option = document.createElement('option');
+                                                    option.value = type.id;
+                                                    option.textContent = type.nom;
+                                                    typeDonSelect.appendChild(option);
+                                                });
+                                            }
+                                        }
+                                    });
+                                });
+                                </script>
 
-                                <div class="col-md-12">
+                                <!-- Champ caché pour le type de catégorie -->
+                                <input type="hidden" name="type_categorie" id="type_categorie" value="materiel">
+
+                                <div class="col-md-12" id="quantite_container_don">
                                     <label class="form-label fw-bold text-dark">
                                         <i class="bi bi-box text-success"></i> Quantité Offerte
                                     </label>
-                                    <input type="number" name="quantite" class="form-control form-control-lg" placeholder="0" required>
+                                    <input type="number" name="quantite" id="quantite_don" class="form-control form-control-lg" placeholder="0" required>
                                 </div>
                             </div>
                         </div>

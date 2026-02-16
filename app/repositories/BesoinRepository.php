@@ -9,17 +9,18 @@ class BesoinRepository {
     }
 
     // Création d'un nouveau besoin
-    public function createBesoin($id_ville, $id_type_don, $quantite, $prix_unitaire, $date_saisie) {
+    public function createBesoin($id_ville, $id_type_don, $quantite, $prix_unitaire, $date_saisie, $montant = null) {
         $st = $this->pdo->prepare("
-            INSERT INTO bngrc_besoin (id_ville, id_type_don, quantite, prix_unitaire, date_saisie)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO bngrc_besoin (id_ville, id_type_don, quantite, prix_unitaire, date_saisie, montant)
+            VALUES (?, ?, ?, ?, ?, ?)
         ");
         $st->execute([
             (int)$id_ville,
             (int)$id_type_don,
-            (int)$quantite,
-            (float)$prix_unitaire,
-            $date_saisie
+            $quantite !== null ? (int)$quantite : null,
+            $prix_unitaire !== null ? (float)$prix_unitaire : null,
+            $date_saisie,
+            $montant !== null ? (float)$montant : null
         ]);
 
         return $this->pdo->lastInsertId();

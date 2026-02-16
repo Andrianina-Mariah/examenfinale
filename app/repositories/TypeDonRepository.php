@@ -34,4 +34,19 @@ class TypeDonRepository {
         }
         return $types;
     }
+
+    // Récupérer ou créer un type "Argent" par défaut pour la catégorie Argent
+    public function getOrCreateTypeArgent($id_categorie_argent) {
+        // Chercher si un type "Argent" existe déjà
+        $st = $this->pdo->prepare("SELECT id FROM bngrc_type_don WHERE id_categorie = ? LIMIT 1");
+        $st->execute([(int)$id_categorie_argent]);
+        $row = $st->fetch(PDO::FETCH_ASSOC);
+        
+        if ($row) {
+            return $row['id'];
+        }
+        
+        // Sinon créer un type par défaut
+        return $this->createTypeDon('Don en argent', $id_categorie_argent);
+    }
 }
