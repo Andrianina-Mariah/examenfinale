@@ -95,11 +95,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/achats/liste" class="nav-link">
-                            <i class="bi bi-receipt"></i> Historique
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a href="/simulation" class="nav-link">
                             <i class="bi bi-shuffle"></i> Dispatch
                         </a>
