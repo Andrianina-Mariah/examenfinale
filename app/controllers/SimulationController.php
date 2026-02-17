@@ -3,40 +3,26 @@ class SimulationController {
     public static function index() {
         Flight::render('front/modele.php', [
             'var' => 'simulation.php',
-            'villes_simulees' => [] 
+            'villes_simulees' => [],
+            'mode_actuel' => null
         ]);
     }
 
-    // public static function lancer() {
-    //     $repo = new DispatchRepository(Flight::db());
-    //     $simul = $repo->calculerSimulationComplete();
-
-    //     if (session_status() === PHP_SESSION_NONE) session_start();
-    //     // On stocke les actions pour la validation réelle en BDD
-    //     $_SESSION['actions_dispatch'] = $simul['actions'];
-
-    //     Flight::render('front/modele.php', [
-    //         'var' => 'simulation.php',
-    //         'villes_simulees' => $simul['affichage']
-    //     ]);
-    // }
     public static function lancer() {
+        $db = Flight::db();
+        $repo = new DispatchRepository($db);
         $mode = Flight::request()->data->mode ?? 'fifo';
-        $repo = new DispatchRepository(Flight::db());
 
-        switch ($mode) {
-            case 'petit_besoin':
-                $simul = $repo->calculerSimulationPrioritePetitBesoin();
-                $labelMode = "Priorité aux petits besoins";
-                break;
-            case 'proportionnel':
-                $simul = $repo->calculerSimulationProportionnelle();
-                $labelMode = "Répartition proportionnelle";
-                break;
-            default:
-                $simul = $repo->calculerSimulationFIFO();
-                $labelMode = "Premier arrivé, premier servi (FIFO)";
-                break;
+        // Choix de l'algorithme
+        if ($mode === 'petit_besoin') {
+            $simul = $repo->calculerSimulationPrioritePetitBesoin();
+            $label = "Priorité aux petits besoins";
+        } elseif ($mode === 'proportionnel') {
+            $simul = $repo->calculerSimulationProportionnelle();
+            $label = "Répartition proportionnelle";
+        } else {
+            $simul = $repo->calculerSimulationFIFO();
+            $label = "Premier arrivé, premier servi (FIFO)";
         }
 
         if (session_status() === PHP_SESSION_NONE) session_start();
@@ -45,7 +31,7 @@ class SimulationController {
         Flight::render('front/modele.php', [
             'var' => 'simulation.php',
             'villes_simulees' => $simul['affichage'],
-            'mode_choisi' => $labelMode
+            'mode_actuel' => $label
         ]);
     }
 
@@ -54,7 +40,7 @@ class SimulationController {
         $actions = $_SESSION['actions_dispatch'] ?? [];
 
         if (empty($actions)) {
-            Flight::redirect(BASE_URL . '/simulation');
+            Flight::redirect('/simulation');
             return;
         }
 
@@ -67,10 +53,10 @@ class SimulationController {
             }
             $pdo->commit();
             unset($_SESSION['actions_dispatch']);
-            Flight::redirect(BASE_URL . '/achats/besoins'); 
+            Flight::redirect('/simulation?success=1'); 
         } catch (Exception $e) {
             $pdo->rollBack();
-            Flight::halt(500, $e->getMessage());
+            Flight::halt(500, "Erreur lors de la validation : " . $e->getMessage());
         }
     }
 }
