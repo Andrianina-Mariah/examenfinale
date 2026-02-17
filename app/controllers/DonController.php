@@ -1,6 +1,32 @@
 <?php
 class DonController {
 
+    public static function liste() {
+        try {
+            $pdo = Flight::db();
+            $donRepo = new DonRepository($pdo);
+            
+            // Récupérer tous les dons avec le nom du type et de la catégorie
+            $st = $pdo->query("
+                SELECT d.*, t.nom AS type_nom, c.nom AS categorie_nom
+                FROM bngrc_don d
+                LEFT JOIN bngrc_type_don t ON d.id_type_don = t.id
+                LEFT JOIN bngrc_categorie c ON t.id_categorie = c.id
+                ORDER BY d.date_saisie DESC, d.id DESC
+            ");
+            $dons = $st->fetchAll(PDO::FETCH_ASSOC);
+
+            Flight::render('front/modele.php', [
+                'var'   => 'listeDons.php',
+                'dons'  => $dons,
+                'title' => 'Liste des Dons'
+            ]);
+
+        } catch (Throwable $e) {
+            self::handleError($e);
+        }
+    }
+
     public static function form() {
         try {
             $pdo = Flight::db();
