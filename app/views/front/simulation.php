@@ -18,18 +18,80 @@
         </ol>
     </nav>
 
-    <!-- Bouton lancer simulation -->
+    <!-- Configuration de la simulation -->
     <div class="card shadow-sm border-0 rounded-3 mb-5">
-        <div class="card-body p-4 text-center">
-            <i class="bi bi-cpu text-primary display-4 d-block mb-3"></i>
-            <h5 class="fw-bold text-dark mb-2">Lancer une simulation de dispatch</h5>
-            <p class="text-muted mb-4">
-                Le système va automatiquement répartir les dons disponibles
-                vers les villes ayant des besoins non satisfaits.
-            </p>
-            <button class="btn btn-primary btn-lg px-5 shadow" id="btn-simuler">
-                <i class="bi bi-play-circle-fill me-2"></i> Simuler le Dispatch
-            </button>
+        <div class="card-body p-4">
+            <div class="text-center mb-4">
+                <i class="bi bi-cpu text-primary display-4 d-block mb-3"></i>
+                <h5 class="fw-bold text-dark mb-2">Configuration de la simulation</h5>
+                <p class="text-muted mb-0">
+                    Choisissez le mode de répartition des dons avant de lancer la simulation
+                </p>
+            </div>
+
+            <!-- Choix du mode de répartition -->
+            <div class="row g-3 mb-4">
+                <div class="col-12">
+                    <label class="form-label fw-bold text-dark">
+                        <i class="bi bi-sliders me-2"></i>Mode de répartition
+                    </label>
+                </div>
+
+                <!-- Option 1: Par ordre (date de saisie) -->
+                <div class="col-md-4">
+                    <input type="radio" class="btn-check" name="mode-repartition" id="mode-ordre" value="ordre" checked>
+                    <label class="btn btn-outline-primary w-100 h-100 p-3 text-start" for="mode-ordre">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-calendar-event fs-3 me-3 mt-1"></i>
+                            <div>
+                                <div class="fw-bold mb-2">Par ordre chronologique</div>
+                                <small class="text-muted">
+                                    Les dons sont distribués selon l'ordre de saisie des besoins (FIFO - First In First Out)
+                                </small>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Option 2: Priorité aux moins demandeurs -->
+                <div class="col-md-4">
+                    <input type="radio" class="btn-check" name="mode-repartition" id="mode-minimum" value="minimum">
+                    <label class="btn btn-outline-success w-100 h-100 p-3 text-start" for="mode-minimum">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-arrow-down-circle fs-3 me-3 mt-1"></i>
+                            <div>
+                                <div class="fw-bold mb-2">Ville avec moins de besoins</div>
+                                <small class="text-muted">
+                                    Priorité aux villes ayant le total de besoins le plus faible
+                                </small>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- Option 3: Répartition proportionnelle -->
+                <div class="col-md-4">
+                    <input type="radio" class="btn-check" name="mode-repartition" id="mode-proportionnel" value="proportionnel">
+                    <label class="btn btn-outline-warning w-100 h-100 p-3 text-start" for="mode-proportionnel">
+                        <div class="d-flex align-items-start">
+                            <i class="bi bi-pie-chart fs-3 me-3 mt-1"></i>
+                            <div>
+                                <div class="fw-bold mb-2">Répartition proportionnelle</div>
+                                <small class="text-muted">
+                                    Distribution équitable basée sur le pourcentage de besoins de chaque ville
+                                </small>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Bouton lancer simulation -->
+            <div class="text-center">
+                <button class="btn btn-primary btn-lg px-5 shadow" id="btn-simuler">
+                    <i class="bi bi-play-circle-fill me-2"></i> Lancer la Simulation
+                </button>
+            </div>
         </div>
     </div>
 
@@ -162,6 +224,9 @@
                     <p class="text-muted small mb-0">Cette action enregistrera le dispatch dans la base de données.</p>
                 </div>
                 <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary px-4" id="btn-recommencer">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Recommencer
+                    </button>
                     <button class="btn btn-outline-secondary px-4" id="btn-annuler-simulation">
                         <i class="bi bi-x-circle me-1"></i> Annuler
                     </button>

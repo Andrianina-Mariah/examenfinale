@@ -1,0 +1,109 @@
+﻿Catégorie,Module,Nom de page,Description,Type,Estimation (temps min),Temps passé,Reste à faire,Avancement (%),Qui,Status
+Base de données,SQL,base.sql,Créer base de données bngrc,Base de données,30,30,0,100,Mariah,Terminé
+Base de données,SQL,Table bngrc_region,"Créer table bngrc_region(id, nom)",Base de données,10,10,0,100,Mariah,Terminé
+Base de données,SQL,Table bngrc_ville,"Créer table bngrc_ville(id, nom, id_region)",Base de données,10,10,0,100,Mariah,Terminé
+Base de données,SQL,Table bngrc_categorie,"Créer table bngrc_categorie(id, nom)",Base de données,10,10,0,100,Mariah,Terminé
+Base de données,SQL,Table bngrc_type_don,"Créer table bngrc_type_don(id, nom, id_categorie)",Base de données,10,10,0,100,Mariah,Terminé
+Base de données,SQL,Table bngrc_besoin,"Créer table bngrc_besoin(id, id_ville, id_type_don, quantite, prix_unitaire, date_saisie)",Base de données,15,15,0,100,Mariah,Terminé
+Base de données,SQL,Table bngrc_don,"Créer table bngrc_don(id, id_type_don, quantite, date_saisie)",Base de données,15,15,0,100,Mariah,Terminé
+Base de données,SQL,Table bngrc_dispatch,"Créer table bngrc_dispatch(id, id_don, id_ville, quantite_attribuee, date_dispatch)",Base de données,15,15,0,100,Mariah,Terminé
+Base de données,SQL,Données test,Insérer données de test dans les tables,Base de données,30,30,0,100,Mariah,Terminé
+Base de données,SQL,Table bngrc_achat,"Créer table achat(id, id_ville, id_type_don, quantite, prix_unitaire, frais_pourcentage, montant_total, date_achat)",Base de données,15,15,0,100,Mariah,Terminé
+Base de données,SQL,Modifier besoin,Ajouter champ prix_unitaire dans table besoin,Base de données,5,5,0,100,Mariah,Terminé
+Base de données,SQL,Modifier don,Ajouter type et montant dans table don,Base de données,5,5,0,100,Mariah,Terminé
+Base de données,SQL,Modifier dispatch,Ajouter champ montant_utilise dans dispatch,Base de données,5,5,0,100,Mariah,Terminé
+Région et Ville,Model,Region.php,Créer modèle Region,Développement,15,15,0,100,Mariah,Terminé
+Région et Ville,Model,Ville.php,Créer modèle Ville,Développement,15,15,0,100,Mariah,Terminé
+Région et Ville,Repository,RegionRepository.php - createRegion(),Méthode pour créer une région,Développement,20,20,0,100,Mariah,Terminé
+Région et Ville,Repository,RegionRepository.php - getAllRegions(),Méthode pour récupérer toutes les régions,Développement,15,15,0,100,Mariah,Terminé
+Région et Ville,Repository,VilleRepository.php - createVille(),Méthode pour créer une ville,Développement,20,20,0,100,Mariah,Terminé
+Région et Ville,Repository,VilleRepository.php - getAllVilles(),Méthode pour récupérer toutes les villes,Développement,15,15,0,100,Mariah,Terminé
+Région et Ville,Repository,VilleRepository.php - getVilleById(),Méthode pour récupérer une ville par ID,Développement,15,15,0,100,Mariah,Terminé
+Région et Ville,Controller,VilleController.php - afficherListeVilles(),Contrôleur pour afficher liste des villes,Développement,25,25,0,100,Idealy,Terminé
+Région et Ville,Controller,VilleController.php - afficherDetailVille(),Contrôleur pour afficher détail d'une ville,Développement,25,25,0,100,Idealy,Terminé
+Région et Ville,View,region_list.php,Vue liste des régions,Développement,30,30,0,100,Mirantsoa,Terminé
+Région et Ville,View,villes.php,Vue liste des villes,Développement,30,30,0,100,Mirantsoa,Terminé
+Région et Ville,View,accueil.php,Vue page d'accueil,Développement,40,40,0,100,Mirantsoa,Terminé
+Région et Ville,View,VilleDetails.php,Vue détails d'une ville,Développement,35,35,0,100,Mirantsoa,Terminé
+Région et Ville,View,Header.php,Template Header,Développement,20,20,0,100,Mirantsoa,Terminé
+Région et Ville,View,Footer.php,Template Footer,Développement,15,15,0,100,Mirantsoa,Terminé
+Catégorie et Type,Model,Categorie.php,Créer modèle Categorie,Développement,15,15,0,100,Mariah,Terminé
+Catégorie et Type,Model,TypeDon.php,Créer modèle TypeDon,Développement,15,15,0,100,Mariah,Terminé
+Catégorie et Type,Repository,CategorieRepository.php - createCategorie(),Méthode pour créer une catégorie,Développement,20,20,0,100,Mariah,Terminé
+Catégorie et Type,Repository,CategorieRepository.php - getAllCategories(),Méthode pour récupérer toutes les catégories,Développement,15,15,0,100,Mariah,Terminé
+Catégorie et Type,Repository,TypeDonRepository.php - createTypeDon(),Méthode pour créer un type de don,Développement,20,20,0,100,Mariah,Terminé
+Catégorie et Type,Repository,TypeDonRepository.php - getAllTypes(),Méthode pour récupérer tous les types,Développement,15,15,0,100,Mariah,Terminé
+Catégorie et Type,Repository,TypeDonRepository.php - getTypesByCategorie(),Méthode pour récupérer types par catégorie,Développement,20,20,0,100,Mariah,Terminé
+Catégorie et Type,View,type_list.php,Vue liste des types de dons,Développement,30,30,0,100,Mirantsoa,Terminé
+Catégorie et Type,View,type_create.php,Vue formulaire création type de don,Développement,35,35,0,100,Mirantsoa,Terminé
+Besoins,Model,Besoin.php,Créer modèle Besoin,Développement,20,20,0,100,Mariah,Terminé
+Besoins,Repository,BesoinRepository.php - createBesoin(),Méthode pour créer un besoin,Développement,25,25,0,100,Mariah,Terminé
+Besoins,Repository,BesoinRepository.php - getBesoinByVille(),Méthode pour récupérer besoins par ville,Développement,20,20,0,100,Mariah,Terminé
+Besoins,Repository,BesoinRepository.php - getTotalBesoinByVille(),Méthode pour calculer total besoins par ville,Développement,20,20,0,100,Mariah,Terminé
+Besoins,Repository,BesoinRepository.php - getBesoinRestantByVille(),Méthode pour calculer besoins restants par ville,Développement,25,25,0,100,Mariah,Terminé
+Besoins,Controller,BesoinController.php - afficherFormBesoin(),Contrôleur pour afficher formulaire besoin,Développement,25,25,0,100,Idealy,Terminé
+Besoins,Controller,BesoinController.php - enregistrerBesoin(),Contrôleur pour enregistrer un besoin,Développement,30,30,0,100,Idealy,Terminé
+Besoins,View,besoin_create.php,Vue formulaire création besoin,Développement,40,40,0,100,Mirantsoa,Terminé
+Besoins,View,formulaireBesoin.php,Vue formulaire besoin,Développement,40,40,0,100,Mirantsoa,Terminé
+Besoins,View,besoin_list.php,Vue liste des besoins,Développement,35,35,0,100,Mirantsoa,Terminé
+Dons,Model,Don.php,Créer modèle Don,Développement,20,20,0,100,Mariah,Terminé
+Dons,Repository,DonRepository.php - createDon(),Méthode pour créer un don,Développement,25,25,0,100,Mariah,Terminé
+Dons,Repository,DonRepository.php - getAllDons(),Méthode pour récupérer tous les dons,Développement,20,20,0,100,Mariah,Terminé
+Dons,Repository,DonRepository.php - getDonsArgentRestants(),Méthode pour récupérer dons d'argent restants,Développement,25,25,0,100,Mariah,Terminé
+Dons,Repository,DonRepository.php - updateMontantRestant(),Méthode pour mettre à jour montant restant,Développement,20,20,0,100,Mariah,Terminé
+Dons,Controller,DonController.php - afficherFormDon(),Contrôleur pour afficher formulaire don,Développement,25,25,0,100,Idealy,Terminé
+Dons,Controller,DonController.php - enregistrerDon(),Contrôleur pour enregistrer un don,Développement,30,30,0,100,Idealy,Terminé
+Dons,Controller,DonController.php - simulerDispatch(),Contrôleur pour simuler le dispatch,Développement,40,40,0,100,Idealy,Terminé
+Dons,View,don_create.php,Vue formulaire création don,Développement,40,40,0,100,Mirantsoa,Terminé
+Dons,View,formulaireDon.php,Vue formulaire don,Développement,40,40,0,100,Mirantsoa,Terminé
+Dons,View,don_list.php,Vue liste des dons,Développement,35,35,0,100,Mirantsoa,Terminé
+Dispatch,Model,Dispatch.php,Créer modèle Dispatch,Développement,20,20,0,100,Mariah,Terminé
+Dispatch,Repository,DispatchRepository.php - createDispatch(),Méthode pour créer un dispatch,Développement,25,25,0,100,Mariah,Terminé
+Dispatch,Repository,DispatchRepository.php - getTotalRecuByVille(),Méthode pour calculer total reçu par ville,Développement,25,25,0,100,Mariah,Terminé
+Dispatch,Repository,DispatchRepository.php - getRecuParTypeByVille(),Méthode pour calculer reçu par type et ville,Développement,30,30,0,100,Mariah,Terminé
+Dispatch,Logique,Algorithme dispatch,Récupérer dons triés par date et dispatcher aux besoins,Développement,60,60,0,100,Idealy,Terminé
+Dashboard,Model,DashboardRepository.php,Créer repository Dashboard,Développement,25,25,0,100,Mariah,Terminé
+Dashboard,Repository,DashboardRepository.php - getResumeParVille(),Méthode pour obtenir résumé par ville,Développement,35,35,0,100,Mariah,Terminé
+Dashboard,Controller,DashboardController.php - afficherDashboard(),Contrôleur pour afficher le dashboard,Développement,30,30,0,100,Idealy,Terminé
+Dashboard,Controller,DashController.php,Contrôleur principal Dashboard,Développement,30,30,0,100,Idealy,Terminé
+Dashboard,View,dashboard.php,Vue tableau de bord principal,Développement,50,50,0,100,Mirantsoa,Terminé
+Achats,Model,Achat.php,Créer modèle Achat,Développement,20,20,0,100,Mariah,Terminé
+Achats,Repository,AchatRepository.php - createAchat(),Méthode pour créer un achat,Développement,30,30,0,100,Mariah,Terminé
+Achats,Repository,AchatRepository.php - getAchatByVille(),Méthode pour récupérer achats par ville,Développement,25,25,0,100,Mariah,Terminé
+Achats,Repository,AchatRepository.php - getTotalAchatByVille(),Méthode pour calculer total achats par ville,Développement,25,25,0,100,Mariah,Terminé
+Achats,Controller,AchatController.php - afficherBesoinsRestants(),Contrôleur pour afficher besoins restants,Développement,30,30,0,100,Idealy,Terminé
+Achats,Controller,AchatController.php - simulerAchat(),Contrôleur pour simuler un achat,Développement,40,40,0,100,Idealy,Terminé
+Achats,Controller,AchatController.php - validerAchat(),Contrôleur pour valider un achat,Développement,35,35,0,100,Idealy,Terminé
+Achats,View,besoins_restants.php,Vue liste besoins non satisfaits,Développement,40,40,0,100,Mirantsoa,Terminé
+Achats,View,achat_besoins.php,Vue achats de besoins,Développement,40,40,0,100,Mirantsoa,Terminé
+Achats,View,simulation.php,Vue simulation d'achat,Développement,45,45,0,100,Mirantsoa,Terminé
+Achats,View,achat_list.php,Vue liste des achats,Développement,40,40,0,100,Mirantsoa,Terminé
+Achats,View,liste_achats.php,Vue liste des achats filtrable,Développement,40,40,0,100,Mirantsoa,Terminé
+Achats,Logique,Algorithme achat,Simulation et validation avec vérification montants,Développement,60,60,0,100,Idealy,Terminé
+Récapitulatif,Model,RecapRepository.php,Créer repository Récapitulatif,Développement,25,25,0,100,Mariah,Terminé
+Récapitulatif,Repository,RecapRepository.php - getTotalBesoinsMontant(),Méthode pour calculer total besoins en montant,Développement,25,25,0,100,Mariah,Terminé
+Récapitulatif,Repository,RecapRepository.php - getTotalSatisfaitMontant(),Méthode pour calculer total satisfait en montant,Développement,25,25,0,100,Mariah,Terminé
+Récapitulatif,Repository,RecapRepository.php - getTotalRestantMontant(),Méthode pour calculer total restant en montant,Développement,25,25,0,100,Mariah,Terminé
+Récapitulatif,Controller,RecapController.php - afficherRecap(),Contrôleur pour afficher récapitulatif,Développement,30,30,0,100,Idealy,Terminé
+Récapitulatif,View,recap.php,Vue page récapitulatif avec totaux,Développement,45,45,0,100,Mirantsoa,Terminé
+Récapitulatif,View,recapitulatif.php,Vue récapitulatif détaillé,Développement,45,45,0,100,Mirantsoa,Terminé
+Récapitulatif,Ajax,Route GET /recap/data,Route Ajax pour récupérer données récap en JSON,Développement,30,30,0,100,Idealy,Terminé
+Récapitulatif,Ajax,Actualisation sans refresh,Mise à jour Ajax des données sans rechargement page,Développement,25,25,0,100,Mirantsoa,Terminé
+Configuration,Model,Config.php,Créer modèle Config,Développement,15,15,0,100,Mariah,Terminé
+Configuration,Repository,ConfigRepository.php,Repository pour configuration système,Développement,20,20,0,100,Mariah,Terminé
+Configuration,Model,User.php,Créer modèle User,Développement,20,20,0,100,Mariah,Terminé
+Configuration,Repository,UserRepository.php,Repository pour gestion utilisateurs,Développement,25,25,0,100,Mariah,Terminé
+Configuration,Repository,MessageRepository.php,Repository pour gestion messages,Développement,25,25,0,100,Mariah,Terminé
+Configuration,Controller,MessageController.php,Contrôleur pour messages,Développement,25,25,0,100,Idealy,Terminé
+Configuration,Service,UserService.php,Service métier pour utilisateurs,Développement,30,30,0,100,Mariah,Terminé
+Configuration,Service,Validator.php,Service de validation des données,Développement,35,35,0,100,Mariah,Terminé
+Configuration,View,modele.php,Template de base pour les vues,Développement,30,30,0,100,Mirantsoa,Terminé
+Infrastructure,Config,bootstrap.php,Fichier d'initialisation de l'application,Développement,25,25,0,100,Mariah,Terminé
+Infrastructure,Config,config.php,Fichier de configuration,Développement,20,20,0,100,Mariah,Terminé
+Infrastructure,Config,routes.php,Fichier de définition des routes,Développement,30,30,0,100,Idealy,Terminé
+Infrastructure,Public,index.php (root),Point d'entrée racine,Développement,15,15,0,100,Mariah,Terminé
+Infrastructure,Public,index.php (public),Point d'entrée public,Développement,15,15,0,100,Mariah,Terminé
+Infrastructure,Assets,validation-login-ajax.js,Script validation login avec Ajax,Développement,35,35,0,100,Mirantsoa,Terminé
+Infrastructure,Assets,validation-register-ajax.js,Script validation inscription avec Ajax,Développement,35,35,0,100,Mirantsoa,Terminé
+Infrastructure,Dependencies,composer.json,Configuration dépendances Composer,Développement,15,15,0,100,Mariah,Terminé
+Documentation,Documentation,README.md,Documentation du projet,Documentation,30,30,0,100,Mariah,Terminé
