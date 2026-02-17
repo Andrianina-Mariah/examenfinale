@@ -5,7 +5,6 @@
         </div>
         <div>
             <h2 class="fw-bold text-dark mb-0">Simulation du Dispatch</h2>
-            <p class="text-muted mb-0">Répartition FIFO des dons physiques vers les besoins</p>
         </div>
     </div>
 
