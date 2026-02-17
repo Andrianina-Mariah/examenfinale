@@ -7,17 +7,45 @@ class SimulationController {
         ]);
     }
 
+    // public static function lancer() {
+    //     $repo = new DispatchRepository(Flight::db());
+    //     $simul = $repo->calculerSimulationComplete();
+
+    //     if (session_status() === PHP_SESSION_NONE) session_start();
+    //     // On stocke les actions pour la validation réelle en BDD
+    //     $_SESSION['actions_dispatch'] = $simul['actions'];
+
+    //     Flight::render('front/modele.php', [
+    //         'var' => 'simulation.php',
+    //         'villes_simulees' => $simul['affichage']
+    //     ]);
+    // }
     public static function lancer() {
+        $mode = Flight::request()->data->mode ?? 'fifo';
         $repo = new DispatchRepository(Flight::db());
-        $simul = $repo->calculerSimulationComplete();
+
+        switch ($mode) {
+            case 'petit_besoin':
+                $simul = $repo->calculerSimulationPrioritePetitBesoin();
+                $labelMode = "Priorité aux petits besoins";
+                break;
+            case 'proportionnel':
+                $simul = $repo->calculerSimulationProportionnelle();
+                $labelMode = "Répartition proportionnelle";
+                break;
+            default:
+                $simul = $repo->calculerSimulationFIFO();
+                $labelMode = "Premier arrivé, premier servi (FIFO)";
+                break;
+        }
 
         if (session_status() === PHP_SESSION_NONE) session_start();
-        // On stocke les actions pour la validation réelle en BDD
         $_SESSION['actions_dispatch'] = $simul['actions'];
 
         Flight::render('front/modele.php', [
             'var' => 'simulation.php',
-            'villes_simulees' => $simul['affichage']
+            'villes_simulees' => $simul['affichage'],
+            'mode_choisi' => $labelMode
         ]);
     }
 
