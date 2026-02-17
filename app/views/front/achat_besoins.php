@@ -1,4 +1,4 @@
-<form action="/achats/besoins" method="GET" class="card shadow-sm border-0 rounded-3 mb-4">
+<form action="<?= BASE_URL ?>/achats/besoins" method="GET" class="card shadow-sm border-0 rounded-3 mb-4">
     <div class="card-body p-4 row align-items-end g-3">
         <div class="col-md-6">
             <label class="form-label fw-bold text-dark">
@@ -19,7 +19,7 @@
             </button>
         </div>
         <div class="col-md-3">
-            <a href="/achats/besoins" class="btn btn-outline-secondary btn-lg w-100">
+            <a href="<?= BASE_URL ?>/achats/besoins" class="btn btn-outline-secondary btn-lg w-100">
                 <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
             </a>
         </div>

@@ -26,7 +26,7 @@ class SimulationController {
         $actions = $_SESSION['actions_dispatch'] ?? [];
 
         if (empty($actions)) {
-            Flight::redirect('/simulation');
+            Flight::redirect(BASE_URL . '/simulation');
             return;
         }
 
@@ -39,7 +39,7 @@ class SimulationController {
             }
             $pdo->commit();
             unset($_SESSION['actions_dispatch']);
-            Flight::redirect('/achats/besoins'); 
+            Flight::redirect(BASE_URL . '/achats/besoins'); 
         } catch (Exception $e) {
             $pdo->rollBack();
             Flight::halt(500, $e->getMessage());

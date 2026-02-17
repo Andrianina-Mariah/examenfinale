@@ -11,7 +11,7 @@
 
     <div class="card shadow-sm border-0 rounded-3 mb-5">
         <div class="card-body p-4 text-center">
-            <form action="/simulation/lancer" method="POST">
+            <form action="<?= BASE_URL ?>/simulation/lancer" method="POST">
                 <i class="bi bi-cpu text-primary display-4 d-block mb-3"></i>
                 <h5 class="fw-bold text-dark mb-3">Lancer l'algorithme de répartition</h5>
                 <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
@@ -86,8 +86,8 @@
                         <p class="text-white-50 small mb-0">L'action est irréversible et mettra à jour les stocks réels.</p>
                     </div>
                     <div class="d-flex gap-2">
-                        <a href="/simulation" class="btn btn-outline-light px-4">Annuler</a>
-                        <form action="/simulation/valider" method="POST">
+                        <a href="<?= BASE_URL ?>/simulation" class="btn btn-outline-light px-4">Annuler</a>
+                        <form action="<?= BASE_URL ?>/simulation/valider" method="POST">
                             <button type="submit" class="btn btn-success btn-lg px-5 shadow">
                                 <i class="bi bi-check-circle-fill me-2"></i> Enregistrer en Base
                             </button>

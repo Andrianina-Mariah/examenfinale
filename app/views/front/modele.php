@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'BNGRC - Gestion des Dons' ?></title>
 
-    <link href="/public/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?= BASE_URL ?>/public/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
@@ -63,7 +63,7 @@
     <!-- HEADER -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-0">
         <div class="container py-2">
-            <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="<?= BASE_URL ?>/">
                 <i class="bi bi-heart-fill text-danger me-2"></i>
                 BNGRC - Suivi des Dons
             </a>
@@ -75,32 +75,32 @@
             <div id="nav" class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a href="/" class="nav-link">
+                        <a href="<?= BASE_URL ?>/" class="nav-link">
                             <i class="bi bi-house-door"></i> Accueil
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/besoin/nouveau" class="nav-link">
+                        <a href="<?= BASE_URL ?>/besoin/nouveau" class="nav-link">
                             <i class="bi bi-clipboard-plus"></i> Ajout Besoin
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/don/nouveau" class="nav-link">
+                        <a href="<?= BASE_URL ?>/don/nouveau" class="nav-link">
                             <i class="bi bi-gift"></i> Ajout Don
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/achats/besoins" class="nav-link">
+                        <a href="<?= BASE_URL ?>/achats/besoins" class="nav-link">
                             <i class="bi bi-cart-check"></i> Achats
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/simulation" class="nav-link">
+                        <a href="<?= BASE_URL ?>/simulation" class="nav-link">
                             <i class="bi bi-shuffle"></i> Dispatch
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/recapitulatif" class="nav-link">
+                        <a href="<?= BASE_URL ?>/recapitulatif" class="nav-link">
                             <i class="bi bi-bar-chart-line"></i> Récap
                         </a>
                     </li>
@@ -152,6 +152,6 @@
     </div>
 </footer>
 
-<script src="/public/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="<?= BASE_URL ?>/public/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

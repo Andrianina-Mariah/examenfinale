@@ -25,7 +25,7 @@
                             </div>
 
                             <div class="d-grid gap-2 mt-auto">
-                                <a href="/villesDetails/<?= $villes[$i]['ville']->getId() ?>" 
+                                <a href="<?= BASE_URL ?>/villesDetails/<?= $villes[$i]['ville']->getId() ?>" 
                                    class="btn btn-primary btn-sm">
                                     <i class="bi bi-eye"></i> Voir les détails
                                 </a>
