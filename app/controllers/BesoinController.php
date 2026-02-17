@@ -117,7 +117,7 @@ class BesoinController {
             }
             // ---------------------------------------------------
 
-            Flight::redirect('/');
+            Flight::redirect(BASE_URL . '/');
 
         } catch (Throwable $e) {
             http_response_code(500);

@@ -4,7 +4,7 @@
             <div class="mb-4">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Accueil</a></li>
+                        <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/" class="text-decoration-none">Accueil</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Saisie don</li>
                     </ol>
                 </nav>
@@ -15,7 +15,7 @@
                     <h4 class="mb-0"><i class="bi bi-gift"></i> Saisie d'un Nouveau Don</h4>
                 </div>
                 <div class="card-body p-4">
-                    <form action="/don/enregistrer" method="POST">
+                    <form action="<?= BASE_URL ?>/don/enregistrer" method="POST">
                         
                         <div class="row mb-4">
                             <div class="col-md-12">

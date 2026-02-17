@@ -68,7 +68,7 @@ class AchatController {
 
         } catch (Exception $e) {
             $pdo->rollBack();
-            Flight::halt(400, $e->getMessage());
+            Flight::redirect(BASE_URL . '/achats/besoins');
         }
     }
 }

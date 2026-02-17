@@ -108,7 +108,7 @@ class DonController {
             }
             // ---------------------------------------
 
-            Flight::redirect('/');
+            Flight::redirect(BASE_URL . '/');
 
         } catch (Throwable $e) {
             self::handleError($e);

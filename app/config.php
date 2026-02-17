@@ -1,5 +1,5 @@
 <?php
-
+define('BASE_URL', rtrim(dirname($_SERVER['SCRIPT_NAME']), '/'));
 define('DB_HOST', '127.0.0.1');
 define('DB_NAME', 'bngrc');
 define('DB_USER', 'root');

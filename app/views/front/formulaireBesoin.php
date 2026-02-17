@@ -5,7 +5,7 @@
             <div class="mb-4">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-3">
-                        <li class="breadcrumb-item"><a href="/" class="text-decoration-none"><i class="bi bi-house-door"></i> Accueil</a></li>
+                        <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/" class="text-decoration-none"><i class="bi bi-house-door"></i> Accueil</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Saisie besoin</li>
                     </ol>
                 </nav>
@@ -20,7 +20,7 @@
                 </div>
             </div>
 
-            <form action="/besoin/enregistrer" method="POST">
+            <form action="<?= BASE_URL ?>/besoin/enregistrer" method="POST">
                 
                 <!-- ÉTAPE 1 : Localisation -->
                 <div class="card shadow-sm border-0 mb-4">
