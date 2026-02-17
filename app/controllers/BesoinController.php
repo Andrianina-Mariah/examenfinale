@@ -36,8 +36,6 @@ class BesoinController {
 
             $typeRepo = new TypeDonRepository($pdo);
             $besoinRepo = new BesoinRepository($pdo);
-            $donRepo = new DonRepository($pdo);
-            $dispatchRepo = new DispatchRepository($pdo);
 
             $id_type_don = $data->id_type_don;
             $catRepo = new CategorieRepository($pdo);
@@ -85,37 +83,6 @@ class BesoinController {
                 $data->date_saisie,
                 $montant
             );
-            
-            // --- LOGIQUE DE SATISFACTION IMMÉDIATE DU BESOIN (seulement pour Nature/Matériel) ---
-            if ($type_categorie !== 'argent' && $quantite > 0) {
-                $quantiteBesoinRestante = (int)$quantite;
-                $id_ville = (int)$data->id_ville;
-                $dateAujourdhui = date('Y-m-d');
-
-                // Récupérer les dons disponibles pour ce produit (le plus vieux don en premier)
-                $donsDispos = $donRepo->getDonsDisponiblesParType($id_type_don);
-
-                foreach ($donsDispos as $don) {
-                    if ($quantiteBesoinRestante <= 0) break; // Le besoin est comblé
-
-                    $stockDispo = (int)$don['stock_restant'];
-                    
-                    // On prend le maximum possible entre le besoin restant et le stock du don
-                    $quantiteAPrendre = min($quantiteBesoinRestante, $stockDispo);
-
-                    if ($quantiteAPrendre > 0) {
-                        $dispatchRepo->createDispatch(
-                            $don['id'],
-                            $id_ville,
-                            $quantiteAPrendre,
-                            $dateAujourdhui
-                        );
-
-                        $quantiteBesoinRestante -= $quantiteAPrendre;
-                    }
-                }
-            }
-            // ---------------------------------------------------
 
             Flight::redirect(BASE_URL . '/');
 
