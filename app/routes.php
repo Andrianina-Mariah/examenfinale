@@ -31,6 +31,8 @@ Flight::route('POST /besoin/enregistrer', ['BesoinController', 'enregistrer']);
 
 Flight::route('GET /don/nouveau', ['DonController', 'form']);
 
+Flight::route('GET /don/liste', ['DonController', 'liste']);
+
 Flight::route('POST /don/enregistrer', ['DonController', 'enregistrer']);
 
 /* V2 - FRONT */

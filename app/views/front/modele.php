@@ -90,6 +90,11 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="<?= BASE_URL ?>/don/liste" class="nav-link">
+                            <i class="bi bi-list-ul"></i> Liste Dons
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="<?= BASE_URL ?>/achats/besoins" class="nav-link">
                             <i class="bi bi-cart-check"></i> Achats
                         </a>
