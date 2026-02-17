@@ -27,8 +27,6 @@ class DonController {
 
             $typeRepo = new TypeDonRepository($pdo);
             $donRepo  = new DonRepository($pdo);
-            $besoinRepo = new BesoinRepository($pdo); // À ajouter
-            $dispatchRepo = new DispatchRepository($pdo); // À ajouter
 
             $id_type_don = $data->id_type_don;
             $catRepo = new CategorieRepository($pdo);
@@ -67,46 +65,13 @@ class DonController {
                 $montant = 0;
             }
 
-            $id_don = $donRepo->createDon(
+            $donRepo->createDon(
                 $id_type_don,
                 $type_categorie,
                 $quantite,
                 $montant,
                 $date_saisie
             );
-
-            // --- LOGIQUE DE DISPATCH AUTOMATIQUE ---
-            $quantiteRestanteDon = $quantite ?? 0; // pour matériel/nature
-            if ($type_categorie === 'argent') {
-                $quantiteRestanteDon = (float)$montant; // pour argent
-            }
-
-            $dateAujourdhui = date('Y-m-d');
-
-            // Récupérer les besoins en attente pour ce type de produit (du plus vieux au plus récent)
-            $besoinsEnAttente = $besoinRepo->getBesoinsNonSatisfaitsParType($id_type_don);
-
-            foreach ($besoinsEnAttente as $besoin) {
-                if ($quantiteRestanteDon <= 0) break; // Plus de stock dans ce don
-
-                $resteBesoin = (int)$besoin['reste'];
-                
-                // On prend soit tout ce qui reste du besoin, soit tout ce qui reste du don
-                $quantiteADonner = min($quantiteRestanteDon, $resteBesoin);
-
-                if ($quantiteADonner > 0) {
-                    // Créer l'entrée dans dispatch
-                    $dispatchRepo->createDispatch(
-                        $id_don,
-                        $besoin['id_ville'],
-                        $quantiteADonner,
-                        $dateAujourdhui
-                    );
-
-                    $quantiteRestanteDon -= $quantiteADonner;
-                }
-            }
-            // ---------------------------------------
 
             Flight::redirect(BASE_URL . '/');
 

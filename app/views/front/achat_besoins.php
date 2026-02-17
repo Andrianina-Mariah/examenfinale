@@ -311,17 +311,20 @@ function calculerTotalAchat(input, pu, tauxFrais) {
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
                     <div class="mb-3">
                         <label class="form-label small text-muted fw-bold">Quantité à acheter</label>
                         <input type="number" class="form-control shadow-sm qte-achat" min="1" max="0" placeholder="Saisir la quantité">
                     </div>
+=======
+>>>>>>> cb4c815 (WIP : travail en cours)
                     <div class="bg-warning bg-opacity-10 rounded-3 p-3 mb-3 text-center">
-                        <small class="text-muted d-block mb-1">Total (P.U. × Qté + Frais)</small>
-                        <h5 class="fw-bold text-warning mb-0 total-achat">0 Ar</h5>
+                        <small class="text-muted d-block mb-1">Montant total (Qté × P.U. + Frais)</small>
+                        <h5 class="fw-bold text-warning mb-0">0 Ar</h5>
                     </div>
                     <div class="d-grid">
                         <button class="btn btn-success shadow-sm btn-acheter">
-                            <i class="bi bi-cart-plus me-1"></i> Acheter
+                            <i class="bi bi-cart-plus me-1"></i> Acheter ce besoin
                         </button>
                     </div>
                 </div>
@@ -358,17 +361,20 @@ function calculerTotalAchat(input, pu, tauxFrais) {
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
                     <div class="mb-3">
                         <label class="form-label small text-muted fw-bold">Quantité à acheter</label>
                         <input type="number" class="form-control shadow-sm qte-achat" min="1" max="0" placeholder="Saisir la quantité">
                     </div>
+=======
+>>>>>>> cb4c815 (WIP : travail en cours)
                     <div class="bg-warning bg-opacity-10 rounded-3 p-3 mb-3 text-center">
-                        <small class="text-muted d-block mb-1">Total (P.U. × Qté + Frais)</small>
-                        <h5 class="fw-bold text-warning mb-0 total-achat">0 Ar</h5>
+                        <small class="text-muted d-block mb-1">Montant total (Qté × P.U. + Frais)</small>
+                        <h5 class="fw-bold text-warning mb-0">0 Ar</h5>
                     </div>
                     <div class="d-grid">
                         <button class="btn btn-success shadow-sm btn-acheter">
-                            <i class="bi bi-cart-plus me-1"></i> Acheter
+                            <i class="bi bi-cart-plus me-1"></i> Acheter ce besoin
                         </button>
                     </div>
                 </div>
@@ -405,17 +411,20 @@ function calculerTotalAchat(input, pu, tauxFrais) {
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
                     <div class="mb-3">
                         <label class="form-label small text-muted fw-bold">Quantité à acheter</label>
                         <input type="number" class="form-control shadow-sm qte-achat" min="1" max="0" placeholder="Saisir la quantité">
                     </div>
+=======
+>>>>>>> cb4c815 (WIP : travail en cours)
                     <div class="bg-warning bg-opacity-10 rounded-3 p-3 mb-3 text-center">
-                        <small class="text-muted d-block mb-1">Total (P.U. × Qté + Frais)</small>
-                        <h5 class="fw-bold text-warning mb-0 total-achat">0 Ar</h5>
+                        <small class="text-muted d-block mb-1">Montant total (Qté × P.U. + Frais)</small>
+                        <h5 class="fw-bold text-warning mb-0">0 Ar</h5>
                     </div>
                     <div class="d-grid">
                         <button class="btn btn-success shadow-sm btn-acheter">
-                            <i class="bi bi-cart-plus me-1"></i> Acheter
+                            <i class="bi bi-cart-plus me-1"></i> Acheter ce besoin
                         </button>
                     </div>
                 </div>
