@@ -26,9 +26,19 @@ class VilleRepository {
 
     public function getAllVillesWithRegion() {
         $sql = "
-            SELECT v.id AS ville_id, v.nom AS ville_nom, r.id AS region_id, r.nom AS region_nom
+            SELECT 
+                v.id AS ville_id, 
+                v.nom AS ville_nom, 
+                r.id AS region_id, 
+                r.nom AS region_nom,
+                COUNT(DISTINCT b.id) AS nombre_besoins,
+                COALESCE(SUM(b.quantite), 0) AS total_quantite,
+                COALESCE(SUM(d.quantite_attribuee), 0) AS total_recu
             FROM bngrc_ville v
             INNER JOIN bngrc_region r ON v.id_region = r.id
+            LEFT JOIN bngrc_besoin b ON v.id = b.id_ville
+            LEFT JOIN bngrc_dispatch d ON v.id = d.id_ville
+            GROUP BY v.id, v.nom, r.id, r.nom
         ";
         $st = $this->pdo->query($sql);
         $rows = $st->fetchAll(PDO::FETCH_ASSOC);
@@ -37,7 +47,10 @@ class VilleRepository {
         foreach ($rows as $row) {
             $villes[] = [
                 'ville' => new Ville($row['ville_id'], $row['ville_nom'], $row['region_id']),
-                'region_nom' => $row['region_nom']
+                'region_nom' => $row['region_nom'],
+                'nombre_besoins' => (int)$row['nombre_besoins'],
+                'total_quantite' => (float)$row['total_quantite'],
+                'total_recu' => (float)$row['total_recu']
             ];
         }
         return $villes;

@@ -78,7 +78,7 @@
                             <div>
                                 <div class="fw-bold mb-2">Répartition proportionnelle</div>
                                 <small class="text-muted">
-                                    Distribution équitable basée sur le pourcentage de besoins de chaque ville
+                                    Distribution équitable selon le nombre de besoins de chaque ville
                                 </small>
                             </div>
                         </div>
