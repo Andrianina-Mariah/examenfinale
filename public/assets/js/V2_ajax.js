@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const btn = document.getElementById('btn-actualiser');
+    const baseUrl = typeof BASE_URL !== 'undefined' ? BASE_URL : '';
     
     function chargerStats() {
         btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Chargement...';
         
-        fetch('/api/stats')
+        fetch(baseUrl + '/api/stats')
             .then(res => res.json())
             .then(data => {
                 // 1. Mise à jour des compteurs globaux

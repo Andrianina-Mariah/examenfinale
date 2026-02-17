@@ -69,7 +69,7 @@
                     </div>
                 </div>
 
-                <form action="/achats/effectuer" method="POST">
+                <form action="<?= BASE_URL ?>/achats/effectuer" method="POST">
                     <input type="hidden" name="id_besoin" value="<?= $b['besoin_id'] ?>">
                     
                     <div class="mb-3">

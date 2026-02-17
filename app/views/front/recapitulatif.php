@@ -11,7 +11,7 @@
 
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/" class="text-decoration-none"><i class="bi bi-house-door"></i> Accueil</a></li>
+            <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/" class="text-decoration-none"><i class="bi bi-house-door"></i> Accueil</a></li>
             <li class="breadcrumb-item active">Récapitulatif</li>
         </ol>
     </nav>
@@ -71,4 +71,7 @@
         </div>
 </div>
 
-<script src="public/assets/js/V2_ajax.js"></script>
+<script>
+    const BASE_URL = '<?= BASE_URL ?>';
+</script>
+<script src="<?= BASE_URL ?>/public/assets/js/V2_ajax.js"></script>

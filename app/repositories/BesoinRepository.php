@@ -35,7 +35,7 @@ class BesoinRepository {
         $besoins = [];
         foreach ($rows as $row) {
             // Calcul de la quantité restante
-            $quantite_restante = $row['quantite'] - $this->getQuantiteAttribuee($row['id_ville'], $row['id_type_don']);
+            $quantite_restante = ($row['quantite'] ?? 0) - $this->getQuantiteAttribuee($row['id_ville'], $row['id_type_don']);
 
             $besoins[] = new Besoin(
                 $row['id'],
@@ -44,7 +44,8 @@ class BesoinRepository {
                 $row['quantite'],
                 $quantite_restante,
                 $row['prix_unitaire'],
-                $row['date_saisie']
+                $row['date_saisie'],
+                $row['montant'] ?? null
             );
         }
 
@@ -80,6 +81,7 @@ class BesoinRepository {
                 b.id_type_don,
                 b.quantite AS besoin_quantite,
                 b.prix_unitaire,
+                b.montant,
                 b.date_saisie AS besoin_date,
                 td.nom AS type_nom,
                 (
@@ -100,7 +102,7 @@ class BesoinRepository {
 
         $result = [];
         foreach ($rows as $row) {
-            $quantite_restante = $row['besoin_quantite'] - (int)$row['quantite_attribuee'];
+            $quantite_restante = ($row['besoin_quantite'] ?? 0) - (int)$row['quantite_attribuee'];
 
             $besoin = new Besoin(
                 $row['besoin_id'],
@@ -109,7 +111,8 @@ class BesoinRepository {
                 $row['besoin_quantite'],
                 $quantite_restante,
                 $row['prix_unitaire'],
-                $row['besoin_date']
+                $row['besoin_date'],
+                $row['montant'] ?? null
             );
 
             $result[] = [
@@ -192,10 +195,16 @@ class BesoinRepository {
                     COALESCE((SELECT SUM(ac.quantite_achetee) FROM bngrc_achat ac WHERE ac.id_type_don = b.id_type_don AND ac.id_ville = b.id_ville), 0)
                 ) as qte_restante,
                 -- Stock disponible en dons PHYSIQUES uniquement (montant IS NULL ou 0)
-                (SELECT SUM(d.quantite) - COALESCE((SELECT SUM(dp.quantite_attribuee) FROM bngrc_dispatch dp WHERE dp.id_don = d.id), 0)
-                FROM bngrc_don d 
-                WHERE d.id_type_don = b.id_type_don AND (d.montant IS NULL OR d.montant = 0)
-                ) as stock_nature_dispo
+                COALESCE((
+                    SELECT SUM(d.quantite) - COALESCE(SUM(dispatched.total_dispatched), 0)
+                    FROM bngrc_don d 
+                    LEFT JOIN (
+                        SELECT id_don, SUM(quantite_attribuee) as total_dispatched 
+                        FROM bngrc_dispatch 
+                        GROUP BY id_don
+                    ) dispatched ON dispatched.id_don = d.id
+                    WHERE d.id_type_don = b.id_type_don AND (d.montant IS NULL OR d.montant = 0)
+                ), 0) as stock_nature_dispo
             FROM bngrc_besoin b
             JOIN bngrc_ville v ON b.id_ville = v.id
             JOIN bngrc_type_don td ON b.id_type_don = td.id

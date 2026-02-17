@@ -3,7 +3,7 @@
     <div class="mb-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/" class="text-decoration-none">Accueil</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Détails ville</li>
             </ol>
         </nav>
@@ -20,13 +20,18 @@
             $totalBesoin = 0;
             $totalAttribue = 0;
             $totalValeur = 0;
+            $totalMontantArgent = 0;
 
             if (!empty($besoins)) {
                 foreach ($besoins as $item) {
                     $b = $item['besoin'];
-                    $totalBesoin += $b->getQuantite();
-                    $totalAttribue += $item['quantite_attribuee'];
-                    $totalValeur += $b->getQuantite() * $b->getPrixUnitaire();
+                    if ($b->isArgent()) {
+                        $totalMontantArgent += $b->getMontant() ?? 0;
+                    } else {
+                        $totalBesoin += $b->getQuantite() ?? 0;
+                        $totalAttribue += $item['quantite_attribuee'] ?? 0;
+                        $totalValeur += ($b->getQuantite() ?? 0) * ($b->getPrixUnitaire() ?? 0);
+                    }
                 }
             }
 
@@ -100,32 +105,59 @@
                             <?php foreach ($besoins as $item): ?>
                                 <?php
                                     $b = $item['besoin'];
-                                    $attribue = $item['quantite_attribuee'];
-                                    $reste = $b->getQuantite() - $attribue;
-                                    $totalValeurItem = $b->getQuantite() * $b->getPrixUnitaire();
+                                    $attribue = $item['quantite_attribuee'] ?? 0;
+                                    $isArgent = $b->isArgent();
+                                    
+                                    if ($isArgent) {
+                                        $montant = $b->getMontant() ?? 0;
+                                        $reste = 0; // Pour l'argent, pas de reste en quantité
+                                        $totalValeurItem = $montant;
+                                    } else {
+                                        $quantite = $b->getQuantite() ?? 0;
+                                        $prixUnitaire = $b->getPrixUnitaire() ?? 0;
+                                        $reste = $quantite - $attribue;
+                                        $totalValeurItem = $quantite * $prixUnitaire;
+                                    }
                                 ?>
                                 <tr>
                                     <td class="ps-4">
                                         <div class="fw-bold text-dark"><?= htmlspecialchars($item['type_nom']) ?></div>
+                                        <?php if ($isArgent): ?>
+                                            <small class="text-success"><i class="bi bi-cash"></i> Don en argent</small>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge bg-light text-dark border">
-                                            <?= number_format($b->getQuantite(), 0, ',', ' ') ?>
-                                        </span>
+                                        <?php if ($isArgent): ?>
+                                            <span class="badge bg-warning text-dark">-</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-light text-dark border">
+                                                <?= number_format($b->getQuantite() ?? 0, 0, ',', ' ') ?>
+                                            </span>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge bg-success text-white">
-                                            <?= number_format($attribue, 0, ',', ' ') ?>
-                                        </span>
+                                        <?php if ($isArgent): ?>
+                                            <span class="badge bg-warning text-dark">-</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-success text-white">
+                                                <?= number_format($attribue, 0, ',', ' ') ?>
+                                            </span>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="text-end pe-3">
-                                        <span class="text-muted"><?= number_format($b->getPrixUnitaire(), 2, ',', ' ') ?> Ar</span>
+                                        <?php if ($isArgent): ?>
+                                            <span class="text-muted">-</span>
+                                        <?php else: ?>
+                                            <span class="text-muted"><?= number_format($b->getPrixUnitaire() ?? 0, 2, ',', ' ') ?> Ar</span>
+                                        <?php endif; ?>
                                     </td>
                                     <td class="text-end pe-3">
                                         <span class="fw-bold text-dark"><?= number_format($totalValeurItem, 2, ',', ' ') ?> Ar</span>
                                     </td>
                                     <td class="text-center">
-                                        <?php if ($reste <= 0): ?>
+                                        <?php if ($isArgent): ?>
+                                            <span class="badge bg-info">Montant fixe</span>
+                                        <?php elseif ($reste <= 0): ?>
                                             <span class="badge bg-success">
                                                 <i class="bi bi-check-circle"></i> Comblé
                                             </span>
@@ -175,7 +207,7 @@
 
     <!-- Bouton retour -->
     <div class="mt-4">
-        <a href="/" class="btn btn-outline-secondary">
+        <a href="<?= BASE_URL ?>/" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i> Retour à l'accueil
         </a>
     </div>

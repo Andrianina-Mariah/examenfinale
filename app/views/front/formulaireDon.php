@@ -159,7 +159,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-                            <a href="/" class="btn btn-outline-secondary">
+                            <a href="<?= BASE_URL ?>/" class="btn btn-outline-secondary">
                                 <i class="bi bi-x-circle"></i> Annuler
                             </a>
                             <button type="submit" class="btn btn-success btn-lg px-5 fw-bold">

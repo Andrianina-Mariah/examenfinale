@@ -296,7 +296,7 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                            <a href="/" class="btn btn-lg btn-outline-secondary px-4">
+                            <a href="<?= BASE_URL ?>/" class="btn btn-lg btn-outline-secondary px-4">
                                 <i class="bi bi-x-circle me-2"></i> Annuler
                             </a>
                             <button type="submit" class="btn btn-lg btn-success px-5 shadow">
