@@ -115,46 +115,6 @@ class DonController {
         }
     }
 
-    // public static function enregistrer() {
-    //     try {
-    //         $pdo = Flight::db();
-    //         $data = Flight::request()->data;
-
-    //         $typeRepo = new TypeDonRepository($pdo);
-    //         $donRepo  = new DonRepository($pdo);
-
-    //         $id_type_don = $data->id_type_don;
-
-    //         // LOGIQUE : Création du type si nouveau_type_nom est rempli [cite: 15, 21]
-    //         if (!empty($data->nouveau_type_nom)) {
-    //             if (empty($data->id_categorie_nouveau)) {
-    //                 throw new Exception("Veuillez choisir une catégorie pour le nouveau type de don.");
-    //             }
-                
-    //             $id_type_don = $typeRepo->createTypeDon(
-    //                 $data->nouveau_type_nom, 
-    //                 $data->id_categorie_nouveau
-    //             );
-    //         }
-
-    //         if (empty($id_type_don)) {
-    //             throw new Exception("Veuillez sélectionner un type de don.");
-    //         }
-
-    //         // Insertion du don dans bngrc_don [cite: 15]
-    //         $donRepo->createDon(
-    //             $id_type_don,
-    //             $data->quantite,
-    //             $data->date_saisie
-    //         );
-
-    //         // Une fois le don saisi, on peut imaginer lancer le dispatch ici plus tard [cite: 15]
-    //         Flight::redirect('/');
-
-    //     } catch (Throwable $e) {
-    //         self::handleError($e);
-    //     }
-    // }
 
     private static function handleError($e) {
         http_response_code(500);
